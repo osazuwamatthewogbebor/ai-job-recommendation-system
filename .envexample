@@ -1,0 +1,24 @@
+# This is the template for your .env 
+# since .env will not be pushed to the repo
+# create .env locally so you can run your code
+
+DB_NAME=
+DB_HOST=
+DB_USER=
+DB_PASSWORD=
+
+
+JWT_SECRET=
+OTP_SECRET=
+
+EMAIL_SERVICE_HOST=
+EMAIL_SERVICE_USER=
+EMAIL_SERVICE_APP_PASSWORD=
+
+JSECRET_API_KEY=
+GEMINI_API_KEY=
+
+PORT=3000
+NODE_ENV=development
+# examples of how to put in your credentials
+# no spaces no quotes

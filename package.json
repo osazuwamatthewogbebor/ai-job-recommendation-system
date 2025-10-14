@@ -1,7 +1,7 @@
 {
   "name": "ai-job-recommendation-system",
   "version": "1.0.0",
-  "description": "An AI recommendation system that helps users get the jobs that they are qualified for without going through the stress and hassle of sifting through tons of irrelevant jobs.",
+  "description": "An AI recommendation system that helps users get the jobs that they are qualified for without going through the stress and hassle of sifting through tons of irrelevant jobs. Users can get AI recommendations straight to their emails. It uses MySQL with Sequelize ORM, JWT authentication, account verification and password recovery, profile management, job cache, rate limiter and wiston logger.",
   "main": "app.js",
   "scripts": {
     "dev": "nodemon src/app.js",

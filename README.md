@@ -8,7 +8,7 @@ Pino adheres to a standard severity model where each log level corresponds to a 
 Logs are processed only if their level is equal to or higher (more severe) than the level configured for the logger or its targets.
 
 | Level Name | Numeric Value | Use Case |
-| :--- | :---: | ---: |
+| :--- | :--- | :--- |
 | trace	| 10	| Debugging: Extremely detailed information, often including variable states and internal function flow. |
 | debug	| 20	| Debugging: Informational events useful for developers during active development and troubleshooting. |
 | info	| 30	| Standard Activity (Default): Routine confirmation that application units are operating normally (e.g., Server started, Database connected). |

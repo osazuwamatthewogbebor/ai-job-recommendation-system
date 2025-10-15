@@ -2,17 +2,25 @@
 import pino, { destination } from 'pino';
 import path from 'path';
 import APP_CONFIG from './APP_CONFIG.js';
-
+import { removeOldFiles } from 'pino-roll/lib/utils.js';
 
 const __dirname = import.meta.dirname;
-const logPath = path.join(__dirname, '../../app.logs');
-
+const logPath = path.join(__dirname, '../..', 'logs', 'app.log');
 
 const transport = pino.transport({
     targets: [{
         level: APP_CONFIG.PINO_LOG_LEVEL_FILE || 'trace',
-        target: 'pino/file',
-        options: { destination: logPath },
+        target: 'pino-roll',
+        options: {  
+            file: logPath,
+            mkdir: true,
+            symlink: true,
+            size: '5m',
+            frequency: 'daily',
+            limit: { count: 5, removeOldFiles: true },
+            dateFormat: 'yyyy-MM-dd',
+            colorize: true,
+        },
         
     }, {
         level: APP_CONFIG.PINO_LOG_LEVEL_CONSOLE || 'info',

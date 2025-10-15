@@ -1,6 +1,7 @@
 import express from 'express';
 import APP_CONFIG from './config/APP_CONFIG.js';
 import AppError from './utils/AppError.js';
+import logger from './config/logger.js';
 
 const port = APP_CONFIG.PORT;
 // All env and configuration files can be gotten from APP_CONFIG
@@ -9,14 +10,15 @@ const port = APP_CONFIG.PORT;
 
 const app = express();
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.listen(port, () => {
-    // We will use winston here, anywhere we are supposed to use console.log
+    // We will use pino logger here, anywhere we are supposed to use console.log
     // console log for now till it is configured on it
-    console.log(`Server is running on port ${port}`);
+    // console.log(`Server is running on port ${port}`);
+    // Pino in use after configuring
+    logger.info(`Server is running on port ${port}`)
 
 
     // this how to use the custom Error class instead of the default error class

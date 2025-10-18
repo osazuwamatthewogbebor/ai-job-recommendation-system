@@ -4,7 +4,6 @@ import AppError from './utils/AppError.js';
 import logger from './config/logger.js';
 import dotenv from 'dotenv';
 import sequelize from './config/sequelize.js';
-import user from './models/User.js';
 import job from './models/job.js';
 import resume from './models/Resume.js';
 import uploadRoutes from './routes/uploadRoutes.js'; 

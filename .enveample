@@ -3,11 +3,12 @@
 # create .env locally so you can run your code
 
 # Database credentials
-DB_NAME=ai_job_db
 DB_HOST=localhost
 DB_USER=root
-DB_PASSWORD=yourpassword
-DB_PORT=5000
+DB_PASSWORD=Samterry13!
+DB_NAME=ai_job_recommendation
+DB_PORT=3306
+
 
 # Auth and email
 JWT_SECRET=

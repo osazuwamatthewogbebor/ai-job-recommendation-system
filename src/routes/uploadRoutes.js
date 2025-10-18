@@ -1,7 +1,7 @@
 import express from 'express';
-import upload from '..midleware/multerSetup.js';
-import Resume from '..models/Resume.js';
-import User from '..models/User.js';
+import upload from '../middleware/multerSetup.js';
+import Resume from '../models/Resume.js';
+import User from '../models/User.js';
 
 const router = express.Router();
 router.post('/uploadResume', upload.single('resume'), async (req, res) => {

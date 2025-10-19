@@ -15,3 +15,18 @@ Logs are processed only if their level is equal to or higher (more severe) than 
 | warn	| 40	| Non-Critical Issues: Potential problems that don't immediately halt execution (e.g., deprecated API use, high-latency request). |
 | error	| 50	| Errors: Runtime exceptions or issues that require immediate attention but might allow the application to continue running. | 
 | fatal	| 60	| Critical Failure: Severe errors that cause the application to crash or become unusable. | 
+
+
+Example usage
+
+Instead of 
+```javascript
+console.log(`Server started on ${port}`)
+```
+You can use
+
+```javascript
+logger.info(`Server started on ${port}`)
+```
+*The log will be saved in the app.logs file and also outputted in the console.*
+

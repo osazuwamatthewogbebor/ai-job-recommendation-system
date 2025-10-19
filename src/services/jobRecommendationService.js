@@ -1,5 +1,3 @@
-import User from './User.js';
-import Job from './job.js'; 
 import dotenv from 'dotenv';
 dotenv.config();
 import axios from 'axios';

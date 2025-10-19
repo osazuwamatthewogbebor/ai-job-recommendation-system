@@ -2,6 +2,7 @@ import express from 'express';
 import APP_CONFIG from './config/APP_CONFIG.js';
 import AppError from './utils/AppError.js';
 import logger from './config/logger.js';
+import emailService from './services/emailService.js';
 
 const port = APP_CONFIG.PORT;
 // All env and configuration files can be gotten from APP_CONFIG
@@ -12,6 +13,13 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Testing email services, will remove them from here later
+// await emailService.sendWelcomeEmail('easydatabundle@gmail.com', 'Welcome', 'Osas');
+// await emailService.sendOtp('easydatabundle@gmail.com', 'Welcome', 'Osas', 1234, 5);
+// await emailService.sendPasswordRecoveryEmail('easydatabundle@gmail.com', 'Welcome', 'Osas.com');
+// await emailService.sendRecommededJobsEmail('easydatabundle@gmail.com', 'Welcome', 'Osas', [])
+
 
 app.listen(port, () => {
     // We will use pino logger here, anywhere we are supposed to use console.log

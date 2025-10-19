@@ -2,7 +2,6 @@
 import pino, { destination } from 'pino';
 import path from 'path';
 import APP_CONFIG from './APP_CONFIG.js';
-import { removeOldFiles } from 'pino-roll/lib/utils.js';
 
 const __dirname = import.meta.dirname;
 const logPath = path.join(__dirname, '../..', 'logs', 'app.log');

@@ -1,16 +1,16 @@
-import sendEmail from "../config/emailConfiguration"
+import sendEmail from "../config/emailConfiguration.js"
 import ejs from 'ejs';
 import path from 'path';
-import logger from "../config/logger";
+import logger from "../config/logger.js";
 
 const __dirname = import.meta.dirname;
 
-const sendOtp = async (recipient, subject, username, otp) => {
+const sendOtp = async (recipient, subject='Verify Your Account', username, otp, otpTime) => {
     try {
         const templatePath = path.join(__dirname, '../..', 'views', 'verifyOtp.ejs');
         console.log(templatePath);
         
-        const htmlData = await ejs.renderFile(templatePath, {user: username, otp: otp});
+        const htmlData = await ejs.renderFile(templatePath, {user: username, otp: otp, otpTime: otpTime});
         await sendEmail(recipient, subject, htmlData);
 
         logger.info(`Otp sent to ${username} successfully.`);
@@ -19,7 +19,7 @@ const sendOtp = async (recipient, subject, username, otp) => {
     };
 };
 
-const sendWelcomeEmail = async (recipient, subject, username) => {
+const sendWelcomeEmail = async (recipient, subject='Welcome to Smart AI Jobber!', username) => {
     try {
         const templatePath = path.join(__dirname, '../..', 'views', 'welcomeMessage.ejs');
         console.log(templatePath);
@@ -33,9 +33,9 @@ const sendWelcomeEmail = async (recipient, subject, username) => {
     };
 };
 
-const sendPasswordRecoveryEmail = async (recipient, subject, username, link) => {
+const sendPasswordRecoveryEmail = async (recipient, subject='Password Reset Request', username, link) => {
     try {
-        const templatePath = path.join(__dirname, '../..', 'views', 'verifyOtp.ejs');
+        const templatePath = path.join(__dirname, '../..', 'views', 'passwordRecovery.ejs');
         console.log(templatePath);
         
         const htmlData = await ejs.renderFile(templatePath, {user: username, resetLink: link});
@@ -47,9 +47,9 @@ const sendPasswordRecoveryEmail = async (recipient, subject, username, link) => 
     };
 };
 
-const sendRecommededJobsEmail = async (recipient, subject, username, jobs) => {
+const sendRecommededJobsEmail = async (recipient, subject='Your Job Recommendations', username, jobs) => {
     try {
-        const templatePath = path.join(__dirname, '../..', 'views', 'verifyOtp.ejs');
+        const templatePath = path.join(__dirname, '../..', 'views', 'recommendedJobs.ejs');
         console.log(templatePath);
         
         const htmlData = await ejs.renderFile(templatePath, {user: username, recommendedJobs: jobs});
@@ -62,4 +62,9 @@ const sendRecommededJobsEmail = async (recipient, subject, username, jobs) => {
 };
 
 
-export {sendOtp, sendWelcomeEmail, sendRecommededJobsEmail, sendPasswordRecoveryEmail}
+export default {
+    sendOtp,
+    sendWelcomeEmail,
+    sendRecommededJobsEmail,
+    sendPasswordRecoveryEmail,
+};

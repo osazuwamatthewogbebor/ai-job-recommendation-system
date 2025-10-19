@@ -1,0 +1,11 @@
+<%- include('includes/header.ejs', { subject: 'Verify Your Account' }) %>
+
+<p>Hi <strong><%= user %></strong>,</p>
+
+<p>Thank you for signing up! Please use the following OTP to verify your account:</p>
+
+<h2 style="text-align: center; color: #007bff;"><%= otp %></h2>
+
+<p>This code will expire in <%= otpTime %> minutes. Do not share it with anyone.</p>
+
+<%- include('includes/footer.ejs') %>

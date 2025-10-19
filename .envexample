@@ -12,7 +12,7 @@ DB_PASSWORD="db password"
 JWT_SECRET="jwt secret"
 OTP_SECRET="otp secret"
 
-EMAIL_SERVICE_HOST="smtp server eg gmail smtp link"
+EMAIL_SERVICE_SMTP_HOST="smtp server eg smtp.gmail.com"
 EMAIL_SERVICE_USER="your email"
 EMAIL_SERVICE_APP_PASSWORD="your app password"
 EMAIL_SERVICE_PORT=465

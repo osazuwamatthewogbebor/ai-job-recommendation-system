@@ -1,4 +1,6 @@
 import express from 'express';
+import jobController from '../controllers/jobController.js';  
+const router = express.Router();
 const router = express.Router();
 import { recommendJobs } from '../controllers/jobControllers.js';
 import { fetchJobs } from '../services/jobRecommendationService.js';

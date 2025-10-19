@@ -1,6 +1,6 @@
 
 node_modules
-.env
+ai-job-recommendation-system/.env
 
 # log folder and files
 logs

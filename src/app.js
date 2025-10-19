@@ -10,6 +10,9 @@ import uploadRoutes from './routes/uploadRoutes.js';
 import user from './models/User.js';
 import apiLimiter from "./middleware/rateLimiter.js";
 
+//import logger from './config/logger.js';
+import jobRoute from './routes/jobRoutes.js';
+import { recommendJobs } from './controllers/jobControllers.js';
 
 const port = APP_CONFIG.PORT;
 // All env and configuration files can be gotten from APP_CONFIG
@@ -42,6 +45,12 @@ sequelize.sync()
         logger.error('Error synchronizing database:', error);
     });
 const PORT = process.env.PORT || 5000;
+app.use('/api', jobRoute);
+
+app.get('/', (req, res) => {
+  res.send('AI Job Recommendation API is running...');
+});
+
 
 
 app.listen(port, () => {
@@ -49,7 +58,8 @@ app.listen(port, () => {
     // console log for now till it is configured on it
     // console.log(`Server is running on port ${port}`);
     // Pino in use after configuring
-    logger.info(`Server is running on port ${port}`)
+
+    //logger.info(`Server is running on port ${port}`)
 
 
     // this how to use the custom Error class instead of the default error class

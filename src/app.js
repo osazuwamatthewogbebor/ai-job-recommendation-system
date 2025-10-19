@@ -21,7 +21,10 @@ const port = APP_CONFIG.PORT;
 // This ensures we have all credentials in one source of truth
 
 dotenv.config();
+
 const app = express();
+
+const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -45,14 +48,12 @@ sequelize.sync()
     .catch((error) => {
         logger.error('Error synchronizing database:', error);
     });
-const PORT = process.env.PORT || 5000;
+
 app.use('/api', jobRoute);
 
 app.get('/', (req, res) => {
   res.send('AI Job Recommendation API is running...');
 });
-
-
 
 app.listen(port, () => {
     // We will use pino logger here, anywhere we are supposed to use console.log
@@ -60,7 +61,7 @@ app.listen(port, () => {
     // console.log(`Server is running on port ${port}`);
     // Pino in use after configuring
 
-    //logger.info(`Server is running on port ${port}`)
+    logger.info(`Server is running on port ${port}`)
 
 
     // this how to use the custom Error class instead of the default error class

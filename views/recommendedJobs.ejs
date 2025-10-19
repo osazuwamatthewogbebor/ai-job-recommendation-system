@@ -1,0 +1,18 @@
+<%- include('includes/header.ejs', { subject: 'Your Job Recommendations' }) %>
+
+<p>Hi <strong><%= user %></strong>,</p>
+
+<p>Here are some jobs Smart AI Jobber thinks you’ll love:</p>
+
+<ul>
+  <% recommendedJobs.forEach(job => { %>
+    <li>
+      <strong><%= job.title %></strong> — <%= job.company %><br>
+      <a href="<%= job.link %>" target="_blank">View Job</a>
+    </li>
+  <% }) %>
+</ul>
+
+<p>Keep exploring and good luck!</p>
+
+<%- include('includes/footer.ejs') %>

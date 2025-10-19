@@ -3,18 +3,19 @@
 # create .env locally so you can run your code
 
 # Database credentials
-DB_NAME=
-DB_HOST=
-DB_USER=
-DB_PASSWORD=
+DB_NAME="db name"
+DB_HOST="db host"
+DB_USER="db user"
+DB_PASSWORD="db password"
 
 # Auth and email
-JWT_SECRET=
-OTP_SECRET=
+JWT_SECRET="jwt secret"
+OTP_SECRET="otp secret"
 
-EMAIL_SERVICE_HOST=
-EMAIL_SERVICE_USER=
-EMAIL_SERVICE_APP_PASSWORD=
+EMAIL_SERVICE_HOST="smtp server eg gmail smtp link"
+EMAIL_SERVICE_USER="your email"
+EMAIL_SERVICE_APP_PASSWORD="your app password"
+EMAIL_SERVICE_PORT=465
 
 # External APIS
 JSECRET_API_KEY=

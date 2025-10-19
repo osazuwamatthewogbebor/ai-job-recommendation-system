@@ -13,7 +13,9 @@
   "type": "module",
   "dependencies": {
     "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
     "express": "^5.1.0",
+    "nodemailer": "^7.0.9",
     "pino": "^10.0.0",
     "pino-roll": "^4.0.0"
   },

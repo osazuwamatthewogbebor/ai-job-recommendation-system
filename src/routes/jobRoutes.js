@@ -1,10 +1,9 @@
 import express from 'express';
 import jobController from '../controllers/jobController.js';  
 const router = express.Router();
-const router = express.Router();
 import { recommendJobs } from '../controllers/jobControllers.js';
 import { fetchJobs } from '../services/jobRecommendationService.js';
-import e from 'express';
+
 
 // Example endpoint: POST /api/recommend
 router.post('/recommend', async (req, res) => {

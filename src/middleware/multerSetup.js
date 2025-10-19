@@ -3,6 +3,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import fs from 'fs';
 dotenv.config();
+
 const uploadDir = process.env.UPLOAD_DIR || 'uploads';
 
 // Ensure upload directory exists

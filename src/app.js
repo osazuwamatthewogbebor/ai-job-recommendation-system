@@ -50,8 +50,6 @@ app.get('/', (req, res) => {
   res.send('AI Job Recommendation API is running...');
 });
 
-
-emailService.sendPasswordRecoveryEmail('easydatabundle@gmail.com', 'Hello', 'Osas', 'osas.com');
 app.listen(port, () => {
     // We will use pino logger here, anywhere we are supposed to use console.log
     // console log for now till it is configured on it

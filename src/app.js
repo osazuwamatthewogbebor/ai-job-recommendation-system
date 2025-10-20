@@ -2,7 +2,7 @@ import express from 'express';
 import APP_CONFIG from './config/APP_CONFIG.js';
 import AppError from './utils/AppError.js';
 import logger from './config/logger.js';
-import emailService from './services/emailService.js';
+// import emailService from './services/emailService.js';
 import dotenv from 'dotenv';
 import sequelize from './config/sequelize.js';
 import job from './models/job.js';

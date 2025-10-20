@@ -8,7 +8,6 @@ const __dirname = import.meta.dirname;
 const sendOtp = async (recipient, subject='Verify Your Account', username, otp, otpTime) => {
     try {
         const templatePath = path.join(__dirname, '../..', 'views', 'verifyOtp.ejs');
-        console.log(templatePath);
         
         const htmlData = await ejs.renderFile(templatePath, {user: username, otp: otp, otpTime: otpTime});
         await sendEmail(recipient, subject, htmlData);
@@ -22,7 +21,6 @@ const sendOtp = async (recipient, subject='Verify Your Account', username, otp, 
 const sendWelcomeEmail = async (recipient, subject='Welcome to Smart AI Jobber!', username) => {
     try {
         const templatePath = path.join(__dirname, '../..', 'views', 'welcomeMessage.ejs');
-        console.log(templatePath);
         
         const htmlData = await ejs.renderFile(templatePath, {user: username});
         await sendEmail(recipient, subject, htmlData);
@@ -36,7 +34,6 @@ const sendWelcomeEmail = async (recipient, subject='Welcome to Smart AI Jobber!'
 const sendPasswordRecoveryEmail = async (recipient, subject='Password Reset Request', username, link) => {
     try {
         const templatePath = path.join(__dirname, '../..', 'views', 'passwordRecovery.ejs');
-        console.log(templatePath);
         
         const htmlData = await ejs.renderFile(templatePath, {user: username, resetLink: link});
         await sendEmail(recipient, subject, htmlData);
@@ -50,7 +47,6 @@ const sendPasswordRecoveryEmail = async (recipient, subject='Password Reset Requ
 const sendRecommededJobsEmail = async (recipient, subject='Your Job Recommendations', username, jobs) => {
     try {
         const templatePath = path.join(__dirname, '../..', 'views', 'recommendedJobs.ejs');
-        console.log(templatePath);
         
         const htmlData = await ejs.renderFile(templatePath, {user: username, recommendedJobs: jobs});
         await sendEmail(recipient, subject, htmlData);

@@ -47,12 +47,12 @@ const sendPasswordRecoveryEmail = async (recipient, subject='Password Reset Requ
     };
 };
 
-const sendRecommededJobsEmail = async (recipient, subject='Your Job Recommendations', username, jobs) => {
+const sendRecommendedJobsEmail = async (recipient, subject='Your Job Recommendations', username, jobs) => {
     try {
         const templatePath = path.join(__dirname, '../..', 'views', 'recommendedJobs.ejs');
         console.log(templatePath);
         
-        const htmlData = await ejs.renderFile(templatePath, {user: username, recommendedJobs: jobs});
+        const htmlData = await ejs.renderFile(templatePath, {user: username, recommendedJobs: jobs? JSON.parse(jobs) : []});
         await sendEmail(recipient, subject, htmlData);
 
         logger.info(`Job recommedations sent to ${username} successfully.`);
@@ -65,6 +65,6 @@ const sendRecommededJobsEmail = async (recipient, subject='Your Job Recommendati
 export default {
     sendOtp,
     sendWelcomeEmail,
-    sendRecommededJobsEmail,
+    sendRecommendedJobsEmail,
     sendPasswordRecoveryEmail,
 };

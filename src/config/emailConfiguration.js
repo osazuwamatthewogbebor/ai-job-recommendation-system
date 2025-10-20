@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 });
 
 
-// Verify the transporter
+// Verify the transporter 
 (async () => {
     try {
         await transporter.verify();

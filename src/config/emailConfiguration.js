@@ -15,14 +15,14 @@ const transporter = nodemailer.createTransport({
 });
 
 
-// Verify the transporter
+// Verify the transporter 
 (async () => {
     try {
         await transporter.verify();
         logger.info("Email server is ready to take our messages.");
 
     } catch (error) {
-        logger.error(`Email server verification failed: ${error.messageId}`)
+        logger.error(`Email server verification failed: ${error}`)
         throw new AppError("Email service verification failed", 500);
     };
 })();
@@ -40,7 +40,7 @@ const sendEmail = async (recipient, subject, data) => {
     try {
         const info = await transporter.sendMail(mailOptions);
 
-        logger.info(`Message sent successfully: ${info.messageId}`);
+        logger.info(`Email sent successfully: ${info.messageId}`);
 
     } catch (err) {
         logger.error(`Email sending failed: ${err}`);

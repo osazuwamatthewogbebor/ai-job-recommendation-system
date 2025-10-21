@@ -1,17 +1,13 @@
 import express from 'express';
 import APP_CONFIG from './config/APP_CONFIG.js';
-import AppError from './utils/AppError.js';
 import logger from './config/logger.js';
-// import emailService from './services/emailService.js';
-import dotenv from 'dotenv';
+import emailService from './services/emailService.js';
 import sequelize from './config/sequelize.js';
 import job from './models/job.js';
 import resume from './models/Resume.js';
 import uploadRoutes from './routes/uploadRoutes.js'; 
 import user from './models/User.js';
 import apiLimiter from "./middleware/rateLimiter.js";
-
-//import logger from './config/logger.js';
 import jobRoute from './routes/jobRoutes.js';
 import { recommendJobs } from './controllers/jobControllers.js';
 
@@ -20,9 +16,10 @@ const port = APP_CONFIG.PORT;
 // when you add sth to .env, also put in APP_CONFIG
 // This ensures we have all credentials in one source of truth
 
-dotenv.config();
+// dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
 const PORT = process.env.PORT || 5000;
 

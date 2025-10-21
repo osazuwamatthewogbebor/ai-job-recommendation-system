@@ -13,7 +13,7 @@ const transport = pino.transport({
         options: {  
             file: logPath,
             mkdir: true,
-            symlink: true,
+            symlink: false,
             size: '5m',
             frequency: 'daily',
             limit: { count: 5, removeOldFiles: true },

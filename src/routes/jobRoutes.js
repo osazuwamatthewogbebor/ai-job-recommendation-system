@@ -3,6 +3,7 @@ import express from 'express';
 const router = express.Router();
 import { recommendJobs } from '../controllers/jobControllers.js';
 import { fetchJobs } from '../services/jobRecommendationService.js';
+import logger from '../config/logger.js';
 
 
 // Example endpoint: POST /api/recommend

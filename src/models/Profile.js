@@ -20,7 +20,7 @@ const Profile = sequelize.define("Profile", {
     type: DataTypes.INTEGER,
   },
   skills: {
-    type: DataTypes.STRING,
+    type: DataTypes.JSON,
   },
   experience: {
     type: DataTypes.STRING,

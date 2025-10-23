@@ -45,11 +45,7 @@ sequelize.sync()
         logger.error('Error synchronizing database:', error);
     });
 
-app.use('/api', jobRoute);
-
-app.get('/', (req, res) => {
-  res.send('AI Job Recommendation API is running...');
-});
+app.use('/api/recommend', jobRoute);
 
 app.listen(port, () => {
     // We will use pino logger here, anywhere we are supposed to use console.log

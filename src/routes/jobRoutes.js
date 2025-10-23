@@ -7,7 +7,7 @@ import logger from '../config/logger.js';
 
 
 // Example endpoint: POST /api/recommend
-router.post('/recommend', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const userProfile = req.body;
     const jobs = await recommendJobs(userProfile);

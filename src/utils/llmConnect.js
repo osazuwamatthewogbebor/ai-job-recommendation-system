@@ -11,35 +11,33 @@ async function main(userProfile) {
         temperature: 0.3,
         topP: 0.9,
         topK: 32,
-        maxOutputTokens: 512,
+       maxOutputTokens: 512,
+       responseMimeType: "application/json",
         systemInstruction: `
 You are an intelligent job query generator.
 
 You will receive a JSON object containing a user's profile with fields like:
 {
+  "name": "Sultan",
+  "email": "example@gmail.com",
   "skills": ["javascript", "react", "node.js"],
+  "isRemotePreferred": true,
   "job_titles": ["frontend developer", "full stack engineer"],
-  "experience_level": "junior",
-  "preferred_location": "Lagos, Nigeria",
+  "preferred_location": "Lagos",
   "country": "Nigeria",
-  "remote_preference": "hybrid",
-  "industry": "tech",
-  "keywords": ["web development", "UI", "startup"]
 }
 
 Your task:
 1. Analyze the user profile.
-2. Identify the most relevant job titles or keywords for job search.
+2. Identify the most relevant job titles, keywords or skills for job search.
 3. Generate a concise, optimized search query that would return the most suitable jobs on JSearch.
 4. Return the result strictly in JSON format with the following structure:
 
 {
-  "query": "string",
+  "query": "developer roles in preferred location",
+  "preferred_location": "Lagos", 
+  "work_from_home": true,
   "country": "string",
-  "filters": {
-    "remote": true | false,
-    "employment_type": "full-time" | "part-time" | null
-  },
   "explanation": "brief reasoning for chosen query"
 }
 
@@ -47,62 +45,21 @@ STRICT RULES:
 - The entire response must be valid JSON. No explanations, comments, markdown, or additional text outside the JSON object.
 - Do not use triple backticks or code fences.
 - Do not include any text before or after the JSON.
-- If a field value is unknown, use an empty string ("") or null (for employment_type).
+- If a field value is unknown, use an empty string ("").
 - Prioritize 'job_titles' if available; otherwise infer from skills and keywords.
 - Include skills as secondary keywords in the query.
 - Use 'preferred_location' or 'country' as the location.
-- If 'remote_preference' is "remote" or "hybrid", set 'filters.remote' = true, otherwise false.
 - Keep 'query' short and clean (max 5 keywords).
         `
       }
     });
-    
-    const text =
-      response?.candidates?.[0]?.content?.parts?.[0]?.text ||
-      response?.candidates?.[0]?.content?.text ||
-      response?.outputText ||
-      "";
+const text = response.candidates[0].content.parts[0].text;
 
-    if (!text) {
-      console.warn("Warning: No text returned from LLM. Using fallback.");
-      return fallbackResponse(userProfile);
-    }
-
-    const cleanText = text.replace(/```(?:json)?/gi, "").trim();
-
-    let parsed;
-    try {
-      parsed = JSON.parse(cleanText);
-    } catch (err) {
-      console.error("Failed to parse LLM output as JSON:", cleanText);
-      parsed = fallbackResponse(userProfile);
-    }
-    return {
-      query: parsed.query || "",
-      country: parsed.country || userProfile.country || "",
-      filters: {
-        remote: parsed?.filters?.remote ?? false,
-        employment_type: parsed?.filters?.employment_type ?? null
-      },
-      explanation: parsed.explanation || ""
-    };
+    const llmOutput = JSON.parse(text);
+    return llmOutput;
   } catch (error) {
-    console.error("Error in LLM connection:", error.message);
-    return fallbackResponse(userProfile);
-  }
-}
-
-function fallbackResponse(userProfile) {
-  const inferredQuery =
-    userProfile.job_titles?.[0] ||
-    userProfile.skills?.slice(0, 3).join(" ") ||
-    "";
-
-  return {
-    query: inferredQuery,
-    country: userProfile.country || "",
-    explanation: "Fallback generated due to parsing or connection error."
-  };
-}
+    console.error("Error in LLM connection:", error);
+    throw error;
+  }}
 
 export { main };

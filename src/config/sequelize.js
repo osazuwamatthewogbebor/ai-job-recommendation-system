@@ -1,13 +1,11 @@
 // Sequelize setup
 import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
+import APP_CONFIG from './APP_CONFIG.js';
 
-dotenv.config();
-
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
-  host: process.env.DB_HOST,
+const sequelize = new Sequelize(`${APP_CONFIG.DB_NAME}`, `${APP_CONFIG.DB_USER}`, `${APP_CONFIG.DB_PASS}`, {
+  host: `${APP_CONFIG.DB_HOST}`,
   dialect: 'mysql',
-  port: process.env.DB_PORT || 3306,
+  port: `${APP_CONFIG.DB_PORT}` || 3306,
 });
 
 try{

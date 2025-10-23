@@ -11,7 +11,7 @@ import apiLimiter from "./middleware/rateLimiter.js";
 import jobRoute from './routes/jobRoutes.js';
 import { recommendJobs } from './controllers/jobControllers.js';
 
-const port = APP_CONFIG.PORT;
+
 // All env and configuration files can be gotten from APP_CONFIG
 // when you add sth to .env, also put in APP_CONFIG
 // This ensures we have all credentials in one source of truth
@@ -19,6 +19,8 @@ const port = APP_CONFIG.PORT;
 // dotenv.config();
 
 const app = express();
+
+const port = APP_CONFIG.PORT;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

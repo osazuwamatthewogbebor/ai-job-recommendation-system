@@ -5,7 +5,7 @@ import emailService from '../services/emailService.js';
 async function recommendJobs(userProfile) {
     try {
         const llmResponse = await main(userProfile);
-    const { query, country, filters } = llmResponse;
+    const { query, preferred_location, country, filters } = llmResponse;
     //const country = location.split(', ').pop(); 
     let jobs = await fetchJobs(query, country, 1);
     //if (filters.remote) {

@@ -19,7 +19,7 @@ const Job = sequelize.define("Job", {
     allowNull: false,
   },
   skillsRequired: {
-    type: DataTypes.ARRAY(DataTypes.STRING) || DataTypes.JSON,
+    type:  DataTypes.JSON,
     allowNull: false,
   },
   postedAt: {

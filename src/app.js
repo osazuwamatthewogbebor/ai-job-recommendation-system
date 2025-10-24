@@ -10,6 +10,7 @@ import user from './models/User.js';
 import apiLimiter from "./middleware/rateLimiter.js";
 import jobRoute from './routes/jobRoutes.js';
 import { recommendJobs } from './controllers/jobControllers.js';
+import Profile from './models/Profile.js';
 
 
 // All env and configuration files can be gotten from APP_CONFIG
@@ -36,7 +37,7 @@ app.get('/', (req, res) => {
     res.send('Welcome to the AI Job Recommendation System API');
 });
 
-// Sync database
+// Sync database 
 sequelize.sync()
     .then(() => {
         logger.info('Database synchronized successfully');
@@ -47,7 +48,7 @@ sequelize.sync()
 
 app.use('/api/recommend', jobRoute);
 
-app.listen(port, () => {
+app.listen(port, () => { 
     // We will use pino logger here, anywhere we are supposed to use console.log
     // console log for now till it is configured on it
     // console.log(`Server is running on port ${port}`);

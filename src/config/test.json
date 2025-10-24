@@ -1,0 +1,9 @@
+{
+    "name": "Sultan",
+    "email": "abdussultan14@gmail.com",
+  "skills": ["C#", "asp.net", "dotnet"],
+  "isRemotePreferred": true,
+  "job_titles": ["C# dev", "asp.net"],
+  "preferred_location": "Lagos",
+  "country": "Nigeria"
+}

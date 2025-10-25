@@ -29,5 +29,9 @@ NODE_ENV=development
 # logger levels
 PINO_LOG_LEVEL_CONSOLE=info
 PINO_LOG_LEVEL_FILE=trace
-# examples of how to put in your credentials
-# no spaces no quotes
+
+# Cache Redis Cloud from cloud.redis.io
+REDIS_USERNAME=default
+REDIS_PASSWORD=
+REDIS_HOST=
+REDIS_PORT=

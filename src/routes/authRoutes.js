@@ -9,7 +9,7 @@ import {
   reset,
   changePasswordController
 } from "../controllers/authControllers.js";
-import { authMiddleware } from "../middleware/authMiddleware.js";
+// import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -34,6 +34,6 @@ router.post("/forgot", forgot);
 router.post("/reset", reset);
 
 //  Change password route
-router.post("/change-password", authMiddleware, changePasswordController);
+// router.post("/change-password", authMiddleware, changePasswordController);
 
 export default router;

@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import { authMiddleware } from "../middleware/authMiddleware.js";
+// import { authMiddleware } from "../middleware/authMiddleware.js";
 import {
   createProfile,
   getProfile,
@@ -22,10 +22,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Routes
-router.get("/", authMiddleware, getProfile);
-router.post("/create", authMiddleware, upload.single("resume"), createProfile);
-router.post("/update", authMiddleware, upload.single("resume"), updateProfile);
-router.post("/delete", authMiddleware, deleteAccount);
+// router.get("/", authMiddleware, getProfile);
+// router.post("/create", authMiddleware, upload.single("resume"), createProfile);
+// router.post("/update", authMiddleware, upload.single("resume"), updateProfile);
+// router.post("/delete", authMiddleware, deleteAccount);
 
 export default router;
 

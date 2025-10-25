@@ -5,11 +5,13 @@ import logger from './config/logger.js';
 import pinoHttp from 'pino-http';
 import sequelize from './config/sequelize.js';
 
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import helmet from 'helmet';
 import apiLimiter from "./middleware/rateLimiter.js";
 
 import { authRoutes, profileRoutes, uploadRoutes, jobRoutes } from './routes/index.js';
+import { authMiddleware } from './middleware/authMiddleware.js';
 
 
 const app = express();
@@ -35,6 +37,7 @@ app.use(
 app.use(helmet());
 app.use(cors());
 
+app.use(cookieParser());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -49,9 +52,9 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
-app.use('/api/profile', profileRoutes);
-app.use('/api/uploads', uploadRoutes);
-app.use('/api/recommend', jobRoutes);
+app.use('/api/profile', authMiddleware, profileRoutes);
+// app.use('/api/uploads', uploadRoutes);
+app.use('/api/recommend', authMiddleware, jobRoutes);
 
 
 // Sync database 

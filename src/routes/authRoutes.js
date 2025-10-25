@@ -13,9 +13,10 @@ import {
 
 const router = express.Router();
 
+
 router.get("/register", (req, res) => res.render("auth/register"));
-router.get("/login", (req, res) => res.render("auth/login"));
 router.get("/verify", (req, res) => res.render("auth/verify"));
+router.get("/login", (req, res) => res.render("auth/login"));
 router.get("/forgot", (req, res) => res.render("auth/forgot"));
 router.get("/reset", (req, res) => res.render("auth/reset"));
 router.get("/change-password", (req, res) => res.render("auth/changePassword"));

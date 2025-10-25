@@ -16,10 +16,12 @@ import AppError from "../utils/AppError.js";
 // Register
 export const register = async (req, res) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.render("auth/register", { errors: errors.array() });
+  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array()[0].msg });
 
   const { name, email, password } = req.body;
   const otp = await registerUser(name, email, password);
+  
+  if (!otp) return res.status(400).send("email already exists");
 
   // Send otp email
   try {
@@ -36,6 +38,9 @@ export const register = async (req, res) => {
 
 // Verify OTP
 export const verify = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array()[0].msg });
+
   const { email, otp } = req.body;
   const user = await verifyUser(email, otp);
   if (!user) return res.status(400).send("Invalid OTP");
@@ -54,6 +59,9 @@ export const verify = async (req, res) => {
 
 // Login
 export const login = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array()[0].msg });
+
   const { email, password } = req.body;
   const token = await loginUser(email, password);
   if (!token) return res.status(401).send("Invalid credentials");
@@ -69,6 +77,9 @@ export const logout = async (req, res) => {
 
 // Forgot password
 export const forgot = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array()[0].msg });
+
   try {
     const { email } = req.body;
     await forgotPassword(email);
@@ -84,6 +95,9 @@ export const forgot = async (req, res) => {
 
 // Reset password
 export const reset = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array()[0].msg });
+
   try {
     const { email, otp, password } = req.body;
     await resetPassword(email, otp, password);
@@ -95,6 +109,9 @@ export const reset = async (req, res) => {
 
 //  Change password (for logged-in user)
 export const changePasswordController = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array()[0].msg });
+
   try {
     const { oldPassword, newPassword } = req.body;
     const userId = req.user.id;

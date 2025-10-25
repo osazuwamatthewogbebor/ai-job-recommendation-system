@@ -24,6 +24,11 @@ const APP_CONFIG = {
     EMAIL_SERVICE_PORT: process.env.EMAIL_SERVICE_PORT,
     PINO_LOG_LEVEL_CONSOLE: process.env.PINO_LOG_LEVEL_CONSOLE,
     PINO_LOG_LEVEL_FILE: process.env.PINO_LOG_LEVEL_FILE,
+
+    REDIS_USERNAME: process.env.REDIS_USERNAME,
+    REDIS_PASSWORD: process.env.REDIS_PASSWORD,
+    REDIS_HOST: process.env.REDIS_HOST, 
+    REDIS_PORT: process.env.REDIS_PORT || 17720
 };
 
 let missing = false;

@@ -1,5 +1,5 @@
-import { initRedis, redisClient } from "../config/cache";
-import logger from "../config/logger";
+import { initRedis, redisClient } from "../config/cache.js";
+import logger from "../config/logger.js";
 
 class CacheManager {
     constructor() {

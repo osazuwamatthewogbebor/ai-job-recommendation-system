@@ -1,7 +1,7 @@
 // Redis configuration
 import { createClient } from "redis";
-import APP_CONFIG from "./APP_CONFIG";
-import logger from "./logger";
+import APP_CONFIG from "./APP_CONFIG.js";
+import logger from "./logger.js";
 
 let client;
 

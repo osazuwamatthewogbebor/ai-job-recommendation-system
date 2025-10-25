@@ -1,67 +1,70 @@
-import { redisClient } from "../config/cache";
+import { initRedis, redisClient } from "../config/cache";
 import logger from "../config/logger";
 
 class CacheManager {
     constructor() {
-        this.redis = redisClient(); 
+        this.redis = null;
+    };
+
+    async connect() { 
+        if (!this.redis) {
+            await initRedis();
+            this.redis = redisClient();
+        };
     };
 
     // add data to redis cache
     async setCache(key, value, ttl = null) {
-        logger.info(`Adding ${key} to cache...`)
+        await this.connect();
 
         const data = JSON.stringify(value);
+        logger.info(`Caching key: ${key}`);
         
         if (ttl) {
             await this.redis.set(key, data, { EX: ttl, NX: true });
         } else {
             await this.redis.set(key, data);
         };
-        logger.info(`${key} cached successfully.`);
+        logger.info(`Cache set for key: ${key}`);
         
         return;
     };
 
     // retrieve data from redis cache
     async getCache(key) {
+        await this.connect();
+
         const data = await this.redis.get(key);
         if (data) {
-            logger.info(`${key} retrieved from cache successfully.`);
-            return data;
+            logger.info(`Cache hit for key: ${key}`);
+            return JSON.parse(data);
         };
 
+        logger.info(`Cache miss for key: ${key}`);
         return null;
     };
 
-    // delete a specific keyfrom redis cache
+    // delete a specific key from redis cache
     async delCache(key) {
+        await this.connect();
+
         await this.redis.del(key);
-        logger.info(`Key ${key} deleted from cache.`);
-        return;
+        logger.info(`Cache deleted for key: ${key}`);
     };
 
-    // clear all cache from redis
-    async flushAllCache() {
-        await this.redis.flushall();
-        logger.info("Cache cleared.");
-        return;
-    };
-
-    // use cache if available, else call fetch function and set cache
+    // Get cache if available, else, call fetch function and set cache
     async getFetchSetCache(key, fetchFn, ttl = null) {
-        const cached = await this.getCache(key);
-        if (cached) {
-            logger.info(`Cache Hit for key ${key}`);
-            return cached;
-        } else {
-            logger.info(`Cache miss for key ${key}. \nCalling API...`);
-            const freshData = await fetchFn();
+        const cachedData = await this.getCache(key);
 
-            // setting to cache
-            await this.setCache(key, freshData, ttl);
-            return freshData;
+        if (cachedData) {
+            return JSON.parse(cachedData);
         };
+        const freshData = await fetchFn();
+        await this.setCache(key, freshData, ttl);
+        return freshData;
     };
+
 };
+
 
 export default new CacheManager();

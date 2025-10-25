@@ -1,5 +1,6 @@
 import Profile from "../models/Profile.js";
 import User from "../models/User.js";
+import cacheManager from "../utils/cacheManager.js";
 
 export const createProfileService = async (userId, data) => {
   const existing = await Profile.findOne({ where: { userId } });
@@ -20,11 +21,16 @@ export const updateProfileService = async (userId, data) => {
   if (!profile) throw new Error("Profile not found.");
 
   await profile.update(data);
+
+  // Clear user cache to avoid stale data
+  const keys = await cacheManager.redis.keys(`jobs:*:user:${profile.user_id}*`);
+  for (const key of keys) await cacheManager.delCache(key);
+
   return profile;
 };
 
 export const deleteAccountService = async (userId) => {
-  await Profile.destroy({ where: { userId } });
+  await Profile.destroy({ where: { user_id: userId } });
   await User.destroy({ where: { id: userId } });
   return true;
 };

@@ -3,18 +3,22 @@ import { createClient } from "redis";
 import APP_CONFIG from "./APP_CONFIG";
 import logger from "./logger";
 
-export const redisClient = async () => {
+let client;
+
+export const initRedis = async () => {
+    if (client && client.isOpen) return client;
+
     // Credentials from redis cloud
-    const client = createClient({
-        username: APP_CONFIG.REDIS_USERNAME,
-        password: APP_CONFIG.REDIS_PASSWORD,
-        socket: {
-            host: APP_CONFIG.REDIS_HOST,
-            port: APP_CONFIG.REDIS_PORT
-        },
+    const client = createClient({ 
+        url: `redis://${APP_CONFIG.REDIS_USERNAME}:${APP_CONFIG.REDIS_PASSWORD}@${APP_CONFIG.REDIS_HOST}:${APP_CONFIG.REDIS_PORT}` 
     });
 
-    client.on('error', err => logger.error(`Redis Client Error: ${err}`));
+    client.on('error', (err) => logger.error(`Redis Client Error: ${err}`));
+    client.on('connect', () => logger.info("Connecting to Redis..."));
+    client.on('ready', () => logger.info("Redis connection is ready!"));
+
     await client.connect();
-    logger.info("Redis db ready to receive cache data!")
+    return client;
 };
+
+export const redisClient = () => client;

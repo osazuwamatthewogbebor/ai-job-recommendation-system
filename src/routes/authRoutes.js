@@ -8,7 +8,7 @@ import {
   forgot,
   reset,
   changePasswordController
-} from "../controllers/authController.js";
+} from "../controllers/authControllers.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = express.Router();

@@ -31,11 +31,11 @@ const sendWelcomeEmail = async (recipient, subject='Welcome to Smart AI Jobber!'
     };
 };
 
-const sendPasswordRecoveryEmail = async (recipient, subject='Password Reset Request', username, link) => {
+const sendPasswordRecoveryEmail = async (recipient, subject='Password Reset Request', username, otp, otpTime) => {
     try {
         const templatePath = path.join(__dirname, '../..', 'views', 'passwordRecovery.ejs');
         
-        const htmlData = await ejs.renderFile(templatePath, {user: username, resetLink: link});
+        const htmlData = await ejs.renderFile(templatePath, {user: username, otp: otp, otpTime: otpTime});
         await sendEmail(recipient, subject, htmlData);
 
         logger.info(`Password reset link sent to ${username} successfully.`);

@@ -1,6 +1,5 @@
 import { fetchJobs } from '../services/jobRecommendationService.js';
 import { main, analyzeJobs } from '../utils/llmConnect.js';
-import Profile from '../models/Profile.js';
 import emailService from '../services/emailService.js';
 import cacheManager from '../utils/cacheManager.js';
 
@@ -46,7 +45,7 @@ async function recommendJobs(userProfile) {
     );
 
     await emailService.sendRecommendedJobsEmail(
-      "example@gmail.com", //Pls put recipient email here
+      userProfile.email || "example@gmail.com", // Pls put recipient email here
       'Your Job Recommendations',
       userProfile.name,
       JSON.stringify(mergedResults)

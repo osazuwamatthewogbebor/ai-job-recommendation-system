@@ -9,17 +9,18 @@ import {
   reset,
   changePasswordController
 } from "../controllers/authControllers.js";
-// import { authMiddleware } from "../middleware/authMiddleware.js";
+import { authMiddleware } from "../middleware/authMiddleware.js";
+
 
 const router = express.Router();
 
 // For frontend clicks and buttons to render auth pages
-router.get("/register", (req, res) => res.render("auth/register"));
-router.get("/verify", (req, res) => res.render("auth/verify"));
-router.get("/login", (req, res) => res.render("auth/login"));
-router.get("/forgot", (req, res) => res.render("auth/forgot"));
-router.get("/reset", (req, res) => res.render("auth/reset"));
-router.get("/change-password", (req, res) => res.render("auth/changePassword"));
+// router.get("/register", (req, res) => res.render("auth/register.ejs"));
+// router.get("/login", (req, res) => res.render("auth/login"));
+// router.get("/verify", (req, res) => res.render("auth/verify"));
+// router.get("/forgot", (req, res) => res.render("auth/forgot"));
+// router.get("/reset", (req, res) => res.render("auth/reset"));
+// router.get("/change-password", authMiddleware ,(req, res) => res.render("auth/changePassword"));
 
 
 // Actual post routes
@@ -37,6 +38,6 @@ router.post("/forgot", forgot);
 router.post("/reset", reset);
 
 //  Change password route
-// router.post("/change-password", authMiddleware, changePasswordController);
+router.post("/change-password", authMiddleware, changePasswordController);
 
 export default router;

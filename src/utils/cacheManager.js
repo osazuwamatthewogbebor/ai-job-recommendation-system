@@ -56,9 +56,8 @@ class CacheManager {
     async getFetchSetCache(key, fetchFn, ttl = null) {
         const cachedData = await this.getCache(key);
 
-        if (cachedData) {
-            return JSON.parse(cachedData);
-        };
+        if (cachedData) return cachedData;
+        
         const freshData = await fetchFn();
         await this.setCache(key, freshData, ttl);
         return freshData;

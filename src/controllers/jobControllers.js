@@ -8,19 +8,31 @@ async function recommendJobs(userProfile) {
   try {
 
     // Get job query from llm
-    const llmResponse = await cacheManager.getFetchSetCache(`jobs:query:ai:user:${userProfile.id}`, main(userProfile), 600); 
+    const llmResponse = await cacheManager.getFetchSetCache(
+      `jobs:query:ai:user:${userProfile.id}`, 
+      () => main(userProfile), 
+      600
+    ); 
 
     const { query, preferred_location, work_from_home, country } = llmResponse;
     
     // Fetch jobs
-    const jobs = await cacheManager.getFetchSetCache(`jobs:fetched:api:user:${userProfile.id}`, fetchJobs(query, country, work_from_home, 1) ,600);
+    const jobs = await cacheManager.getFetchSetCache(
+      `jobs:fetched:api:user:${userProfile.id}`, 
+      () => fetchJobs(query, country, work_from_home, 1),
+      600
+    );
 
     if (!jobs || jobs.length === 0) {
       return { success: true, top_jobs: [], message: "No jobs found." };
     }
 
     // Job analysis
-    const analyzed = await cacheManager.getFetchSetCache(`jobs:analysis:ai:user:${userProfile.id}`, analyzeJobs(userProfile, jobs), 600);
+    const analyzed = await cacheManager.getFetchSetCache(
+      `jobs:analysis:ai:user:${userProfile.id}`, 
+      () => analyzeJobs(userProfile, jobs), 
+      600
+    );
     
     // Merged jobs recommended
     const mergedResults = cacheManager.getFetchSetCache(
@@ -28,7 +40,6 @@ async function recommendJobs(userProfile) {
       () => {
         const results = jobs.map(job => {
           const analysis = analyzed?.top_jobs?.find(a => a.job_id === job.job_id);
-
           return {
             job_id: job.job_id,
             title: job.job_title || job.title || "Unknown Title",
@@ -45,9 +56,9 @@ async function recommendJobs(userProfile) {
     );
 
     await emailService.sendRecommendedJobsEmail(
-      userProfile.email || "example@gmail.com", // Pls put recipient email here
+      userProfile?.User?.email || "example@gmail.com", // Pls put recipient email here
       'Your Job Recommendations',
-      userProfile.name,
+      userProfile?.User?.name || "User",
       JSON.stringify(mergedResults)
     );
     return { 

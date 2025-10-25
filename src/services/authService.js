@@ -1,34 +1,16 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-// import nodemailer from "nodemailer";
 import User from "../models/User.js";
-import dotenv from "dotenv";
 import emailService from "./emailService.js";
 
-// dotenv.config();
-
-// const transporter = nodemailer.createTransport({
-//   service: "gmail",
-//   auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
-// });
 
 // Register new user
 export const registerUser = async (name, email, password) => {
   const hashed = await bcrypt.hash(password, 10);
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  const user = await User.create({ name, email, password: hashed, otp });
+  const user = await User.create({ name, email, password: hashed });
 
-  // await transporter.sendMail({
-  //   from: process.env.EMAIL_USER,
-  //   to: email,
-  //   subject: "Your OTP Verification Code",
-  //   text: `Verify your account, Your OTP is ${otp}`
-  // });
-
-  // Send otp email
-  await emailService.sendOtp(email, "Your OTP Verification Code", name, otp, otpTime);
-
-  return user;
+  return otp;
 };
 
 // Verify user OTP
@@ -39,8 +21,6 @@ export const verifyUser = async (email, otp) => {
   user.otp = null;
   await user.save();
 
-  // Send welcome email
-  await emailService.sendWelcomeEmail(recipient=user.email, username=user.name);
   return user;
 };
 
@@ -68,15 +48,6 @@ export const forgotPassword = async (email) => {
   user.otp = otp;
   await user.save();
 
-  // await transporter.sendMail({
-  //   from: process.env.EMAIL_USER,
-  //   to: email,
-  //   subject: "Password Reset OTP",
-  //   text: `Use this OTP to reset your password: ${otp}`
-  // });
-
-  // send password email
-  emailService.sendPasswordRecoveryEmail(email, "Password Reset OTP", user.name, otp, otpTime);
   return otp;
 };
 

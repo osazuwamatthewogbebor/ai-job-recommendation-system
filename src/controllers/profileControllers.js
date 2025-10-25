@@ -4,6 +4,7 @@ import {
   updateProfileService,
   deleteAccountService,
 } from "../services/profileService.js";
+import cacheManager from "../utils/cacheManager.js";
 
 export const createProfile = async (req, res) => {
   try {
@@ -39,6 +40,11 @@ export const updateProfile = async (req, res) => {
     const resume = req.file ? req.file.path : undefined;
 
     const profile = await updateProfileService(userId, { ...updatedData, resume });
+
+    // Clear user cache to avoid stale data
+    const keys = await cacheManager.redis.keys(`jobs:*:user:${profile.user_id}*`);
+    for (const key of keys) await cacheManager.delCache(key);
+    
     res.render("profile/profile", {
       title: "Profile Updated",
       profile,

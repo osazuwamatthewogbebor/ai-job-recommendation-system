@@ -33,7 +33,7 @@ export const verify = async (req, res) => {
 export const login = async (req, res) => {
   const { email, password } = req.body;
   const token = await loginUser(email, password);
-  if (!token) return res.send("Invalid credentials");
+  if (!token) return res.status(401).send("Invalid credentials");
   res.cookie("token", token);
   res.redirect("/profile");
 };

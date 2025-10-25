@@ -17,21 +17,6 @@ import { authMiddleware } from './middleware/authMiddleware.js';
 const app = express();
 const port = APP_CONFIG.PORT;
 
-// http request logger
-app.use(
-    pinoHttp({
-        logger,
-        autoLogging: true,
-        customLogLevel: (res, err) => {
-            if (res.statusCode >= 500 || err) return 'error';
-            if (res.statusCode >= 400) return 'warn';
-            return 'info';
-        },
-        customSuccessMessage: (res) => {
-            return `${res.req.method} ${res.req.url} -> ${res.statusCode}`;
-        },
-    })
-);
 
 // Security setup
 app.use(helmet());

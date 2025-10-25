@@ -26,16 +26,75 @@ const router = express.Router();
 // Actual post routes
 router.post("/register",
   [
-    body("email").isEmail().withMessage("Invalid email"),
-    body("password").isLength({ min: 6 }).withMessage("Password too short"),
+    body("name")
+    .notEmpty().withMessage("Name is required")
+    .isLength({ min: 5 }).withMessage("Name must be at least 5 characters"),
+    body("email")
+    .notEmpty().withMessage("Email is required")
+    .isEmail().withMessage("Invalid email"),
+    body("password")
+    .notEmpty().withMessage("Password is required")
+    .isLength({ min: 6 }).withMessage("Password must be at least 6 characters"),
 ],
   register
 );
-router.post("/verify", verify);
-router.post("/login", login);
-router.get("/logout", logout);
-router.post("/forgot", forgot);
-router.post("/reset", reset);
+
+router.post("/verify",
+  [
+    body("email")
+    .notEmpty().withMessage("Email is required")
+    .isEmail().withMessage("Invalid email"),
+    body("otp")
+    .notEmpty().withMessage("OTP is required")
+    .isLength({ min: 6, max: 6 }).withMessage("OTP must be 6 characters"),
+  ],
+   verify
+  );
+
+router.post("/login",
+   [
+    body("email")
+    .notEmpty().withMessage("Email is required")
+    .isEmail().withMessage("Invalid email"),
+    body("password")
+    .notEmpty().withMessage("Password is required")
+    .isLength({ min: 6 }).withMessage("Password must be at least 6 characters"),
+  ], 
+  login);
+  
+router.post("/forgot", 
+  [
+    body("email")
+    .notEmpty().withMessage("Email is required")
+    .isEmail().withMessage("Invalid email"),
+  ],
+  forgot
+);
+
+router.post("/reset", 
+  [
+    body("email")
+    .notEmpty().withMessage("Email is required")
+    .isEmail().withMessage("Invalid email"),
+    body("otp")
+    .notEmpty().withMessage("OTP is required")
+    .isLength({ min: 6, max: 6 }).withMessage("OTP must be 6 characters"),
+    body("newPassword")
+    .notEmpty().withMessage("New password is required")
+    .isLength({ min: 6 }).withMessage("New password must be at least 6 characters"),
+  ],
+  reset);
+
+router.get("/logout", 
+  [
+    body("password")
+    .notEmpty().withMessage("Password is required")
+    .isLength({ min: 6 }).withMessage("Password must be at least 6 characters"),
+    body("newPassword")
+    .notEmpty().withMessage("New password is required")
+    .isLength({ min: 6 }).withMessage("New password must be at least 6 characters"),
+  ], 
+  logout);
 
 //  Change password route
 router.post("/change-password", authMiddleware, changePasswordController);

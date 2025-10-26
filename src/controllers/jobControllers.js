@@ -1,75 +1,48 @@
-import { fetchJobs } from '../services/jobRecommendationService.js';
-import { main, analyzeJobs } from '../utils/llmConnect.js';
-import emailService from '../services/emailService.js';
-import cacheManager from '../utils/cacheManager.js';
+import logger from "../config/logger.js";
+import Profile from "../models/Profile.js";
+import User from "../models/User.js";
+import emailService from "../services/emailService.js";
+import { recommendJobs } from "../services/jobRecommendationService.js";
 
-async function recommendJobs(userProfile) {
 
-  try {
-
-    // Get job query from llm
-    const llmResponse = await cacheManager.getFetchSetCache(
-      `jobs:query:ai:user:${userProfile.id}`, 
-      () => main(userProfile), 
-      600
-    ); 
-
-    const { query, preferred_location, work_from_home, country } = llmResponse;
-    
-    // Fetch jobs
-    const jobs = await cacheManager.getFetchSetCache(
-      `jobs:fetched:api:user:${userProfile.id}`, 
-      () => fetchJobs(query, country, work_from_home, 1),
-      600
-    );
-
-    if (!jobs || jobs.length === 0) {
-      return { success: true, top_jobs: [], message: "No jobs found." };
+export const jobController = async (req, res) => {
+   try {
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).json({ success: false, message: 'userId is required' });
     }
+    const userProfile = await Profile.findOne({ 
+      where: { userId } ,
+      include: [{
+        model: User,
+        attributes: ['name', 'email'],
+      }]
+    });
 
-    // Job analysis
-    const analyzed = await cacheManager.getFetchSetCache(
-      `jobs:analysis:ai:user:${userProfile.id}`, 
-      () => analyzeJobs(userProfile, jobs), 
-      600
-    );
-    
-    // Merged jobs recommended
-    const mergedResults = cacheManager.getFetchSetCache(
-      `jobs:recommended:merged:user:${userProfile.id}`, 
-      () => {
-        const results = jobs.map(job => {
-          const analysis = analyzed?.top_jobs?.find(a => a.job_id === job.job_id);
-          return {
-            job_id: job.job_id,
-            title: job.job_title || job.title || "Unknown Title",
-            company: job.employer_name || "Unknown Company",
-            location: job.job_city || job.job_country || "Unknown Location",
-            link: job.job_apply_link || job.url || "",
-            match_score: analysis ? analysis.match_score : 0,
-            reason: analysis ? analysis.reason : "No analysis available."
-          };
-        });
-        return results.sort((a, b) => b.match_score - a.match_score);
-      },
-      600
-    );
+    if (!userProfile) {
+      return res.status(404).json({ success: false, message: 'Profile not found' });
+    }
+    const profileData = userProfile.get({ plain: true });
+    const jobs = await recommendJobs(profileData);
 
+    // Send recommended jobs to email
     await emailService.sendRecommendedJobsEmail(
       userProfile?.User?.email || "example@gmail.com", // Pls put recipient email here
       'Your Job Recommendations',
       userProfile?.User?.name || "User",
-      JSON.stringify(mergedResults)
+      JSON.stringify(jobs)
     );
-    return { 
+
+    res.status(200).json(
+      { 
         success: true, 
         message: "Job recommendations fetched successfully, Check your email!",
-    };
-  } catch (error) {
-    console.error('Error in recommendJobs:', error);
-    throw error;
+        jobs
+    }
+    );
+
+  } catch (err) {
+    logger.error('Error in /api/recommend:', err);
+    res.status(500).json({ success: false, error: err.message });
   }
 }
-
-export { recommendJobs };
-

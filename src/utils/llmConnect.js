@@ -1,4 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
+import logger from "../config/logger.js";
 
 async function main(userProfile) {
   try {
@@ -59,7 +60,7 @@ async function main(userProfile) {
     return llmOutput;
 
   } catch (error) {
-    console.error("1 Error in LLM connection:", error);
+    logger.error({ err: error }, "1 Error in LLM connection:");
     throw error;
   }} 
 
@@ -122,7 +123,7 @@ async function main(userProfile) {
     return llmOutput;
 
   } catch (error) {
-    console.error("Error in LLM connection:", error);
+    logger.error({ err: error }, "Error in LLM connection:");
     throw error;
   }};
 

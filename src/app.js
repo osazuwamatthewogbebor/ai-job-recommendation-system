@@ -2,7 +2,6 @@ import express from 'express';
 
 import APP_CONFIG from './config/APP_CONFIG.js';
 import logger from './config/logger.js';
-import pinoHttp from 'pino-http';
 import sequelize from './config/sequelize.js';
 
 import cookieParser from 'cookie-parser';
@@ -51,6 +50,6 @@ sequelize.sync()
         });
     })
     .catch((error) => {
-        logger.error('Error synchronizing database:', error);
+        logger.error({ err: error }, 'Error synchronizing database:');
         process.exit(1);
     });

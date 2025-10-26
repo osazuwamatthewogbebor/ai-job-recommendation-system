@@ -13,13 +13,13 @@ export const createProfile = async (req, res) => {
     const resume = req.file ? req.file.path : null;
 
     const profile = await createProfileService(userId, { ...profileData, resume });
-    res.render("profile/profile", {
+    res.status(201).json({
       title: "Profile Created",
       profile,
       message: "Profile created successfully!",
     });
   } catch (error) {
-    res.status(400).render("profile/profile", { error: error.message });
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -27,9 +27,9 @@ export const getProfile = async (req, res) => {
   try {
     const userId = req.user.id;
     const profile = await getProfileService(userId);
-    res.render("profile/profile", { title: "Your Profile", profile });
+    res.status(200).json({ title: "Your Profile", profile });
   } catch (error) {
-    res.status(400).render("profile/profile", { error: error.message });
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -45,13 +45,13 @@ export const updateProfile = async (req, res) => {
     const keys = await cacheManager.redis.keys(`jobs:*:user:${profile.user_id}*`);
     for (const key of keys) await cacheManager.delCache(key);
     
-    res.render("profile/profile", {
+    res.status(200).json({
       title: "Profile Updated",
       profile,
       message: "Profile updated successfully!",
     });
   } catch (error) {
-    res.status(400).render("profile/profile", { error: error.message });
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -59,11 +59,10 @@ export const deleteAccount = async (req, res) => {
   try {
     const userId = req.user.id;
     await deleteAccountService(userId);
-    res.redirect("/auth/logout");
+    res.status(200).json({ sucess: true, message: "Account deleted successfully" });
   } catch (error) {
-    res.status(400).send(error.message);
-  }
-  res.status(201).json({ message: "Account deleted successfully" });
+    res.status(400).json({ error: error.message });
+  };
 };
 
 

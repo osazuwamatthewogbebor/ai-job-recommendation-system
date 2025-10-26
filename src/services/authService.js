@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import emailService from "./emailService.js";
+import APP_CONFIG from "../config/APP_CONFIG.js";
 
 
 // Register new user
@@ -32,7 +33,7 @@ export const loginUser = async (email, password) => {
   if (!user) return null;
   const match = await bcrypt.compare(password, user.password);
   if (!match) return null;
-  const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "1d" });
+  const token = jwt.sign({ id: user.id, email: user.email }, APP_CONFIG.JWT_SECRET, { expiresIn: "1d" });
   return token;
 };
 

@@ -31,6 +31,14 @@ const Profile = sequelize.define('Profile', {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  resumeUrl: {
+      type: DataTypes.STRING,
+      allowNull: false,
+  },
+  profileImageUrl: {
+    type: DataTypes.STRING, 
+    allowNull: true,
+  },
 }, {
   tableName: 'profiles',
   timestamps: true,

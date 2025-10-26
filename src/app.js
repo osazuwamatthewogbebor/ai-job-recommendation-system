@@ -38,7 +38,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', authMiddleware, profileRoutes);
-// app.use('/api/uploads', uploadRoutes);
+app.use('/api/uploads', authMiddleware, uploadRoutes);
 app.use('/api/recommend', authMiddleware, jobRoutes);
 
 

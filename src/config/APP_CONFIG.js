@@ -28,7 +28,9 @@ const APP_CONFIG = {
     REDIS_USERNAME: process.env.REDIS_USERNAME,
     REDIS_PASSWORD: process.env.REDIS_PASSWORD,
     REDIS_HOST: process.env.REDIS_HOST, 
-    REDIS_PORT: process.env.REDIS_PORT || 17720
+    REDIS_PORT: process.env.REDIS_PORT || 17720,
+
+    UPLOAD_DIR: process.env.UPLOAD_DIR || "uploads"
 };
 
 let missing = false;

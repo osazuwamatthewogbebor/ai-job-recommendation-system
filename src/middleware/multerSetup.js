@@ -1,14 +1,17 @@
 import multer from 'multer';
 import path from 'path';
-import dotenv from 'dotenv';
 import fs from 'fs';
-dotenv.config();
-const uploadDir = process.env.UPLOAD_DIR || 'uploads';
+import APP_CONFIG from '../config/APP_CONFIG.js';
+import AppError from '../utils/AppError.js';
+
+
+const uploadDir = APP_CONFIG.UPLOAD_DIR || 'uploads';
 
 // Ensure upload directory exists
 if (!fs.existsSync(uploadDir)){
     fs.mkdirSync(uploadDir);
-}
+};
+
 const storage = multer.diskStorage({
   destination:  (req, file, cb) => {
     cb(null, uploadDir);
@@ -19,19 +22,30 @@ const storage = multer.diskStorage({
   }
 });
 
+
+const fileFilter = (req, file, cb) => {
+  
+  let filetypes = [];
+
+  if (file.fieldname === 'resume') {
+    filetypes = ['.pdf', '.doc', '.docx'];
+  } else if (file.fieldname === 'profileImage') {
+    filetypes = ['.jpg', '.jpeg', '.png', '.gif'];
+  } else {
+    return cb(new AppError("Unknown upload field", 400));
+  };
+
+  const ext = path.extname(file.originalname).toLowerCase();
+  if (filetypes.includes(ext)) return cb(null, true);
+
+  cb(new AppError(`Error: File upload only supports the following filetypes - ${allowedExtensions.join(', ')}`, 400));
+};
+
+
 const upload = multer({ 
   storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-  fileFilter: (req, file, cb) => {
-    const filetypes = ['.pdf', '.doc', '.docx'];
-    const mimetype = filetypes.includes(file.mimetype);
-    const extname = filetypes.includes(path.extname(file.originalname).toLowerCase());
-
-    if (mimetype && extname) {
-      return cb(null, true);
-    }
-    cb('Error: File upload only supports the following filetypes - ' + filetypes);
-  }
+  fileFilter
 });
 
 export default upload;

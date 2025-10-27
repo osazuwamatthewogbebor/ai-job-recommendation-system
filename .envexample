@@ -8,7 +8,9 @@ DB_HOST="db host"
 DB_USER="db user"
 DB_PASSWORD="db password"
 DB_PORT=
+
 DB_DIALECT="postgres" # or mysql, sqlite, mssql
+
 # Auth and email
 JWT_SECRET="jwt secret"
 OTP_SECRET="otp secret"
@@ -37,3 +39,4 @@ REDIS_HOST=
 REDIS_PORT=
 REDIS_URL=redis://localhost:6379
 REDIS_TLS=false
+REDIS_PORT=

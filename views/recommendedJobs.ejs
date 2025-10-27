@@ -1,0 +1,90 @@
+<%- include('includes/header.ejs', { subject: 'Your Job Recommendations' }) %>
+
+<p>Hi <strong><%= user %></strong>,</p>
+<% if (!recommendedJobs || recommendedJobs.length === 0) { %>
+  <h3>No job recommendations available at the moment.</h3>
+<% } else { %>
+<p>Here are some jobs Smart AI Jobber thinks you’ll love:</p>
+
+<ul>
+  <% recommendedJobs.forEach(job => { %>
+    <li>
+      <strong><%= job.title %></strong> — <%= job.company %><br>
+      <em><%= job.loaction %></em><br>
+      <a href="<%= job.link %>" target="_blank">View Job</a>
+      <small><strong>Match Score:</strong><%= job.match_score %></small><br>
+      <small><strong>Reason:</strong><%= job.reason %></small>
+    </li>
+  <% }) %>
+</ul>
+<% } %>
+
+<p>Keep exploring and good luck!</p>
+
+<p>Hi <strong><%= user %></strong>,</p>
+
+<% if (!recommendedJobs || recommendedJobs.length === 0) { %>
+  <h3>No job recommendations available at the moment.</h3>
+  <p>Don't worry — Smart AI Jobber is always learning. Check back soon for new opportunities tailored to your skills and preferences.</p>
+<% } else { %>
+  <p>Here are some top job recommendations we found just for you:</p>
+
+  <% recommendedJobs.forEach(job => { %>
+    <div style="border: 1px solid #e5e5e5; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+      <h3 style="margin: 0; color: #007bff;"><%= job.title %></h3>
+      <p style="margin: 5px 0; font-weight: bold; color: #555;"><%= job.company %></p>
+      <p style="margin: 5px 0; color: #666;"><%= job.location %></p>
+        
+      <% if (job.match_score) { %>
+        <p style="margin: 5px 0;"><strong>Match Score:</strong> <%= job.match_score %>%</p>
+      <% } %>
+
+      <% if (job.reason) { %>
+        <p style="margin: 5px 0; font-style: italic; color: #444;"><strong>Why this job:</strong> <%= job.reason %></p>
+      <% } %>
+
+      <% if (job.link) { %>
+        <a href="<%= job.link %>" class="button" target="_blank">View Job</a>
+      <% } %>
+    </div>
+  <% }) %>
+
+  <p style="margin-top: 20px;">We’ve emailed you these personalized job suggestions so you never miss an opportunity that fits you best.</p>
+<% } %>
+
+<p>Keep exploring — your next big oppor  <p>Hi <strong><%= user %></strong>,</p>
+
+  <% if (!recommendedJobs || recommendedJobs.length === 0) { %>
+    <h3>No job recommendations available at the moment.</h3>
+    <p>Don't worry — Smart AI Jobber is always learning. Check back soon for new opportunities tailored to your skills and preferences.</p>
+  <% } else { %>
+    <p>Here are some top job recommendations we found just for you:</p>
+
+    <% recommendedJobs.forEach(job => { %>
+      <div style="border: 1px solid #e5e5e5; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+        <h3 style="margin: 0; color: #007bff;"><%= job.title %></h3>
+        <p style="margin: 5px 0; font-weight: bold; color: #555;"><%= job.company %></p>
+        <p style="margin: 5px 0; color: #666;"><%= job.location %></p>
+        
+        <% if (job.match_score) { %>
+          <p style="margin: 5px 0;"><strong>Match Score:</strong> <%= job.match_score %>%</p>
+        <% } %>
+
+        <% if (job.reason) { %>
+          <p style="margin: 5px 0; font-style: italic; color: #444;"><strong>Why this job:</strong> <%= job.reason %></p>
+        <% } %>
+
+        <% if (job.link) { %>
+          <a href="<%= job.link %>" class="button" target="_blank">View Job</a>
+        <% } %>
+      </div>
+    <% }) %>
+
+    <p style="margin-top: 20px;">We’ve emailed you these personalized job suggestions so you never miss an opportunity that fits you best.</p>
+  <% } %>
+
+  <p>Keep exploring — your next big opportunity is waiting!</p>
+tunity is waiting!</p>
+
+
+<%- include('includes/footer.ejs') %>

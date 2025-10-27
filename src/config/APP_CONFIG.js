@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export default {
+const APP_CONFIG = {
     PORT: process.env.PORT || 3000,
     NODE_ENV: process.env.NODE_ENV || 'development',
 
@@ -18,11 +18,32 @@ export default {
     JWT_SECRET: process.env.JWT_SECRET,
     OTP_SECRET: process.env.OTP_SECRET,
 
-    EMAIL_SERVICE_HOST: process.env.EMAIL_SERVICE_HOST,
+    EMAIL_SERVICE_SMTP_HOST: process.env.EMAIL_SERVICE_SMTP_HOST,
     EMAIL_SERVICE_USER: process.env.EMAIL_SERVICE_USER,
     EMAIL_SERVICE_APP_PASSWORD: process.env.EMAIL_SERVICE_APP_PASSWORD,
+    EMAIL_SERVICE_PORT: process.env.EMAIL_SERVICE_PORT,
     PINO_LOG_LEVEL_CONSOLE: process.env.PINO_LOG_LEVEL_CONSOLE,
     PINO_LOG_LEVEL_FILE: process.env.PINO_LOG_LEVEL_FILE,
+
+    REDIS_USERNAME: process.env.REDIS_USERNAME,
+    REDIS_PASSWORD: process.env.REDIS_PASSWORD,
+    REDIS_HOST: process.env.REDIS_HOST, 
+    REDIS_PORT: process.env.REDIS_PORT || 17720,
+
+    UPLOAD_DIR: process.env.UPLOAD_DIR || "uploads"
 };
 
+let missing = false;
 
+for (let key in APP_CONFIG) {
+    if (!APP_CONFIG[key]) {
+        missing = true;
+        console.error(`${key} is not set in environment variables`);
+    };
+};
+
+if (!missing) {
+    console.log.info(`All required credentials are present in environment vairiables`);
+};
+
+export default APP_CONFIG;

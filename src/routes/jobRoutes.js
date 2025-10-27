@@ -1,20 +1,9 @@
 import express from 'express';
-import jobController from '../controllers/jobController.js';  
-const router = express.Router();
-const router = express.Router();
-import { recommendJobs } from '../controllers/jobControllers.js';
-import { fetchJobs } from '../services/jobRecommendationService.js';
-import e from 'express';
+import { jobController } from '../controllers/jobControllers.js';
 
-// Example endpoint: POST /api/recommend
-router.post('/recommend', async (req, res) => {
-  try {
-    const userProfile = req.body;
-    const jobs = await recommendJobs(userProfile);
-    res.json({ success: true, jobs });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
+
+const router = express.Router();
+
+router.post('/', jobController);
 
 export default router;

@@ -1,26 +1,30 @@
 import express from 'express';
+
 import APP_CONFIG from './config/APP_CONFIG.js';
-import AppError from './utils/AppError.js';
 import logger from './config/logger.js';
-import dotenv from 'dotenv';
 import sequelize from './config/sequelize.js';
 import job from './models/job.js';
 // import resume from './models/Resume.js';
 import uploadRoutes from './routes/uploadRoutes.js'; 
 import user from './models/User.js';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import helmet from 'helmet';
 import apiLimiter from "./middleware/rateLimiter.js";
 
-//import logger from './config/logger.js';
-import jobRoute from './routes/jobRoutes.js';
-import { recommendJobs } from './controllers/jobControllers.js';
+import { authRoutes, profileRoutes, uploadRoutes, jobRoutes } from './routes/index.js';
+import { authMiddleware } from './middleware/authMiddleware.js';
 
-const port = APP_CONFIG.PORT;
-// All env and configuration files can be gotten from APP_CONFIG
-// when you add sth to .env, also put in APP_CONFIG
-// This ensures we have all credentials in one source of truth
 
-dotenv.config();
 const app = express();
+const port = APP_CONFIG.PORT;
+
+
+// Security setup
+app.use(helmet());
+app.use(cors());
+
+app.use(cookieParser());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -30,40 +34,25 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api", apiLimiter);
 
 // Routes
-app.use('/api/uploads', uploadRoutes);
-
 app.get('/', (req, res) => {
     res.send('Welcome to the AI Job Recommendation System API');
 });
 
-// Sync database
+app.use('/api/auth', authRoutes);
+app.use('/api/profile', authMiddleware, profileRoutes);
+app.use('/api/uploads', authMiddleware, uploadRoutes);
+app.use('/api/recommend', authMiddleware, jobRoutes);
+
+
+// Sync database 
 sequelize.sync()
     .then(() => {
         logger.info('Database synchronized successfully');
+        app.listen(port, () => { 
+          logger.info(`Server is running on port ${port}`);
+        });
     })
     .catch((error) => {
-        logger.error('Error synchronizing database:', error);
+        logger.error({ err: error }, 'Error synchronizing database:');
+        process.exit(1);
     });
-const PORT = process.env.PORT || 5000;
-app.use('/api', jobRoute);
-
-app.get('/', (req, res) => {
-  res.send('AI Job Recommendation API is running...');
-});
-
-
-
-app.listen(port, () => {
-    // We will use pino logger here, anywhere we are supposed to use console.log
-    // console log for now till it is configured on it
-    // console.log(`Server is running on port ${port}`);
-    // Pino in use after configuring
-
-    //logger.info(`Server is running on port ${port}`)
-
-
-    // this how to use the custom Error class instead of the default error class
-    // throw new AppError(`Testing the custom error class`, 401)
-    // whenever you need throw new Error(), use the AppError instead
-    // It takes the message and statusCode making it more precise than the default new Error
-;});

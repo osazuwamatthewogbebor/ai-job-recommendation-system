@@ -3,7 +3,10 @@ import express from 'express';
 import APP_CONFIG from './config/APP_CONFIG.js';
 import logger from './config/logger.js';
 import sequelize from './config/sequelize.js';
-
+import job from './models/job.js';
+// import resume from './models/Resume.js';
+import uploadRoutes from './routes/uploadRoutes.js'; 
+import user from './models/User.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import helmet from 'helmet';

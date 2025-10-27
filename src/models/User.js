@@ -20,6 +20,24 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  
+  createdAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
+  otp: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+ otpTime: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
+
 }, {
   timestamps: true,
 });

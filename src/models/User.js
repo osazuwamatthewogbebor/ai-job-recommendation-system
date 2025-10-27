@@ -20,9 +20,7 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-   resumeUrl: {
-    type: DataTypes.STRING,
-  },
+  
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
@@ -31,6 +29,16 @@ const User = sequelize.define("User", {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
+  otp: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+ otpTime: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
+}, {
+  timestamps: true,
 });
 
 export default User;

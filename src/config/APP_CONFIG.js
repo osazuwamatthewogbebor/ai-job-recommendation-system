@@ -45,7 +45,7 @@ for (let key in APP_CONFIG) {
 };
 
 if (!missing) {
-    console.log.info(`All required credentials are present in environment vairiables`);
+    console.log(`All required credentials are present in environment vairiables`);
 };
 
 export default APP_CONFIG;

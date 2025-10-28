@@ -7,9 +7,10 @@ import {
   logout,
   forgot,
   reset,
-  changePasswordController
+  changePasswordController,
+  resendOtp
 } from "../controllers/authControllers.js";
-import { authMiddleware } from "../middleware/authMiddleware.js";
+import { authMiddleware, verifyAccountMiddleware } from "../middleware/authMiddleware.js";
 
 
 const router = express.Router();
@@ -61,6 +62,8 @@ router.post("/login",
     .isLength({ min: 6 }).withMessage("Password must be at least 6 characters"),
   ], 
   login);
+
+router.get("/send-otp", verifyAccountMiddleware, resendOtp);  
   
 router.post("/forgot", 
   [
@@ -76,9 +79,6 @@ router.post("/reset",
     body("email")
     .notEmpty().withMessage("Email is required")
     .isEmail().withMessage("Invalid email"),
-    body("otp")
-    .notEmpty().withMessage("OTP is required")
-    .isLength({ min: 6, max: 6 }).withMessage("OTP must be 6 characters"),
     body("newPassword")
     .notEmpty().withMessage("New password is required")
     .isLength({ min: 6 }).withMessage("New password must be at least 6 characters"),

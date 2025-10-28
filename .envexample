@@ -13,7 +13,9 @@ DB_DIALECT="postgres" # or mysql, sqlite, mssql
 
 # Auth and email
 JWT_SECRET="jwt secret"
-OTP_SECRET="otp secret"
+JWT_OTP_SECRET="otp secret for registration"
+ACCESS_TOKEN_EXPIRY_TIME="e.g 1d"
+VERIFICATION_TOKEN_EXPIRY_TIME="e.g 30d"
 
 EMAIL_SERVICE_SMTP_HOST="smtp server eg smtp.gmail.com"
 EMAIL_SERVICE_USER="your email"

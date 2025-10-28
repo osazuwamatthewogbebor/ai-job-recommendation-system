@@ -54,6 +54,8 @@ async function main(userProfile) {
                   `
       }
     });
+    // console.log(response.candidates[0].content);
+    
     const text = response.candidates[0].content.parts[0];
     const llmOutput = JSON.parse(text.text);
     

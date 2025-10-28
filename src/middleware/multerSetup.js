@@ -36,9 +36,10 @@ const fileFilter = (req, file, cb) => {
   };
 
   const ext = path.extname(file.originalname).toLowerCase();
+  
   if (filetypes.includes(ext)) return cb(null, true);
 
-  cb(new AppError(`Error: File upload only supports the following filetypes - ${allowedExtensions.join(', ')}`, 400));
+  cb(new AppError(`Error: File upload only supports the following filetypes - ${filetypes.join(', ')}`, 400));
 };
 
 

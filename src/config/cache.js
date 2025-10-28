@@ -9,7 +9,7 @@ export const initRedis = async () => {
     if (client && client.isOpen) return client;
 
     // Credentials from redis cloud
-    const client = createClient({ 
+    client = createClient({ 
         url: `redis://${APP_CONFIG.REDIS_USERNAME}:${APP_CONFIG.REDIS_PASSWORD}@${APP_CONFIG.REDIS_HOST}:${APP_CONFIG.REDIS_PORT}` 
     });
 
@@ -20,5 +20,3 @@ export const initRedis = async () => {
     await client.connect();
     return client;
 };
-
-export const redisClient = () => client;

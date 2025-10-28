@@ -1,4 +1,4 @@
-import { initRedis, redisClient } from "../config/cache.js";
+import { initRedis } from "../config/cache.js";
 import logger from "../config/logger.js";
 
 class CacheManager {
@@ -8,9 +8,14 @@ class CacheManager {
 
     async connect() { 
         if (!this.redis) {
-            await initRedis();
-            this.redis = redisClient();
+            this.redis = await initRedis();
         };
+    };
+
+    // get keys from redis
+    async getKeys(pattern) {
+        await this.connect();
+        return await this.redis.keys(pattern);
     };
 
     // add data to redis cache

@@ -11,6 +11,7 @@ import apiLimiter from "./middleware/rateLimiter.js";
 import { authRoutes, profileRoutes, uploadRoutes, jobRoutes } from './routes/index.js';
 import { authMiddleware } from './middleware/authMiddleware.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
+import { initRedis } from './config/cache.js';
 
 
 const app = express();
@@ -25,6 +26,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use("/uploads", express.static("../uploads"));
 
 // Apply the rate limiter to all API routes
 app.use("/api", apiLimiter);
@@ -48,6 +50,15 @@ app.use(notFound);
 // Global error handler
 app.use(errorHandler);
 
+// Connecting to Redis
+(async () => {
+    try {
+        await initRedis();
+        logger.info("Redis ssuccessufully initialised.")
+    } catch (error) {
+        logger.error(`Failed to connect to Redis: ${error.message}`)
+    };
+})();
 
 // Sync database 
 sequelize.sync()

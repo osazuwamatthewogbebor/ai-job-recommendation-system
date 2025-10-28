@@ -7,7 +7,7 @@ import { recommendJobs } from "../services/jobRecommendationService.js";
 
 export const jobController = async (req, res) => {
    try {
-    const { userId } = req.body;
+    const userId = req.user.id;
     if (!userId) {
       return res.status(400).json({ success: false, message: 'userId is required' });
     }

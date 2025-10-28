@@ -1,3 +1,4 @@
+import logger from "../config/logger.js";
 import {
   createProfileService,
   getProfileService,
@@ -10,9 +11,9 @@ export const createProfile = async (req, res) => {
   try {
     const userId = req.user.id;
     const profileData = req.body;
-    const resume = req.file ? req.file.path : null;
-
-    const profile = await createProfileService(userId, { ...profileData, resume });
+    const resumeUrl = `${req.protocol}://${req.get('host')}/${req.file?.path?.replace(/\\/g, '/')}`;
+    
+    const profile = await createProfileService(userId, { ...profileData, resumeUrl });
     res.status(201).json({
       title: "Profile Created",
       profile,
@@ -37,18 +38,31 @@ export const updateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
     const updatedData = req.body;
-    const resume = req.file ? req.file.path : undefined;
+    const resumeUrl = `${req.protocol}://${req.get('host')}/${req.file?.path?.replace(/\\/g, '/')}`;
+    
+    delete updatedData.id;
+    delete updatedData.userId
 
-    const profile = await updateProfileService(userId, { ...updatedData, resume });
+    const profile = await updateProfileService(userId, { ...updatedData, resumeUrl });
 
     // Clear user cache to avoid stale data
-    const keys = await cacheManager.redis.keys(`jobs:*:user:${profile.user_id}*`);
-    for (const key of keys) await cacheManager.delCache(key);
+    const pattern = `jobs:*:user:${profile.userId}*`;
+    const keys = await cacheManager.getKeys(pattern);
+      
+    if (keys.length > 0) {
+      for (const key of keys) {
+        await cacheManager.delCache(key);
+      };
+      logger.info(`Cleared ${keys.length} cached entries for user ${profile.userId}`);
+    } else {
+      logger.info(`No cached jobs found for user ${profile.userId}`);
+    }
+
     
     res.status(200).json({
       title: "Profile Updated",
-      profile,
       message: "Profile updated successfully!",
+      profile,
     });
   } catch (error) {
     res.status(400).json({ error: error.message });

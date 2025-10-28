@@ -4,3 +4,4 @@ log
 *.log
 *.logs
 node_modules
+uploads

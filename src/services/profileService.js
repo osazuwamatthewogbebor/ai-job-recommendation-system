@@ -19,14 +19,22 @@ export const getProfileService = async (userId) => {
 
 export const updateProfileService = async (userId, data) => {
   const profile = await Profile.findOne({ where: { userId } });
+  
   if (!profile) throw new AppError("Profile not found.");
+  
+  Object.keys(data).forEach((key) => {
+    if (data[key] !== undefined) {
+      profile[key] = data[key];
+    };
+  });
 
-  await profile.update(data);
+  await profile.save();
+  
   return profile;
 };
 
 export const deleteAccountService = async (userId) => {
-  await Profile.destroy({ where: { user_id: userId } });
+  await Profile.destroy({ where: { userId } });
   await User.destroy({ where: { id: userId } });
   return true;
 };

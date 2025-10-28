@@ -1,14 +1,14 @@
-import { uploadResume } from "../services/uploadServices.js";
+import { uploadProfileImage, uploadResume } from "../services/uploadServices.js";
 
 
 export const resumeUploader = async (req, res) => {
   try {
     const userId = req.user.id;
     if (!req.file) {
-        return res.status(400).json({ message: "No resume file uploade" });
+        return res.status(400).json({ message: "No resume file uploaded" });
     };
 
-    const resumeUrl = `${req.protocol}://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`;
+    const resumeUrl = `${req.protocol}://${req.get('host')}/${req.file?.path?.replace(/\\/g, '/')}`;
 
     const updatedProfile = await uploadResume(userId, resumeUrl);
     if (!updatedProfile) {
@@ -28,7 +28,7 @@ export const profileImageUploader = async (req, res) => {
         return res.status(400).json({ message: "No image file uploaded" });
     };
 
-    const profileImageUrl = `${req.protocol}://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`;
+    const profileImageUrl = `${req.protocol}://${req.get('host')}/${req.file?.path?.replace(/\\/g, '/')}`;
 
     const updatedProfile = await uploadProfileImage(userId, profileImageUrl);
     if (!updatedProfile) {

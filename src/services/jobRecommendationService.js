@@ -45,7 +45,7 @@ async function recommendJobs(userProfile) {
             job_id: job.job_id,
             title: job.job_title || job.title || "Not Specified",
             company: job.employer_name || "Unknown Company",
-            location: job.job_city || job.job_state || job.job_country || job.job_location || "Not Specified",
+            location: job.job_city || job.job_state || job.job_country || job.job_location || "",
             link: job.job_apply_link || job.url || "",
             match_score: analysis ? analysis.match_score : 0,
             reason: analysis ? analysis.reason : "No analysis available."

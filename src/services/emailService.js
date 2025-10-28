@@ -5,11 +5,11 @@ import logger from "../config/logger.js";
 
 const __dirname = import.meta.dirname;
 
-const sendOtp = async (recipient, subject='Verify Your Account', username, otp, otpTime) => {
+const sendOtp = async (recipient, subject='Verify Your Account', username, otp, otpTimeMins) => {
     try {
         const templatePath = path.join(__dirname, '../..', 'views', 'verifyOtp.ejs');
         
-        const htmlData = await ejs.renderFile(templatePath, {user: username, otp: otp, otpTime: otpTime});
+        const htmlData = await ejs.renderFile(templatePath, {user: username, otp: otp, otpTimeMins: otpTimeMins});
         await sendEmail(recipient, subject, htmlData);
 
         logger.info(`Otp sent to ${username} successfully.`);
@@ -31,11 +31,11 @@ const sendWelcomeEmail = async (recipient, subject='Welcome to Smart AI Jobber!'
     };
 };
 
-const sendPasswordRecoveryEmail = async (recipient, subject='Password Reset Request', username, otp, otpTime) => {
+const sendPasswordRecoveryEmail = async (recipient, subject='Password Reset Request', username, otp, otpTimeMins) => {
     try {
         const templatePath = path.join(__dirname, '../..', 'views', 'passwordRecovery.ejs');
         
-        const htmlData = await ejs.renderFile(templatePath, {user: username, otp: otp, otpTime: otpTime});
+        const htmlData = await ejs.renderFile(templatePath, {user: username, otp: otp, otpTimeMins: otpTimeMins});
         await sendEmail(recipient, subject, htmlData);
 
         logger.info(`Password reset link sent to ${username} successfully.`);

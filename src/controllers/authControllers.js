@@ -13,6 +13,7 @@ import emailService from "../services/emailService.js";
 import logger from "../config/logger.js";
 import AppError from "../utils/AppError.js";
 import { getOtp, getOtpExpiryTime } from "../utils/otpGen.js";
+import APP_CONFIG from "../config/APP_CONFIG.js";
 
 
 // Register
@@ -22,7 +23,8 @@ export const register = async (req, res) => {
 
   const { name, email, password } = req.body;
   const otp = getOtp();
-  const otpTime = getOtpExpiryTime(5);
+  const otpTimeMins = APP_CONFIG.OTP_EXPIRY_TIME_MINS;
+  const otpTime = getOtpExpiryTime(otpTimeMins);
   
   const token = await registerUser(name, email, password, otp, otpTime);
   
@@ -30,7 +32,7 @@ export const register = async (req, res) => {
 
   // Send otp email
   try {
-    await emailService.sendOtp(email, "Your OTP Verification Code", name, otp, otpTime);
+    await emailService.sendOtp(email, "Your OTP Verification Code", name, otp, otpTimeMins);
   } catch (error) {
     logger.error(error.message);
     throw new AppError(error.nessage, 500);
@@ -53,12 +55,13 @@ export const verify = async (req, res) => {
 
   // Send welcome email
   try {
-    await emailService.sendWelcomeEmail(recipient=user.email, username=user.name);
+    await emailService.sendWelcomeEmail(user.email, 'Welcome to Smart AI Jobber!', user.name);
   } catch (error) {
     logger.error(error.message);
-    throw AppError(error.nessage, 500);
+    throw new AppError(error.nessage, 500);
   };
 
+  res.clearCookie("token");
   // res.render("auth/login", { message: "Verification successful!" });
   res.status(200).send("Account verification was successful")
 };
@@ -68,14 +71,15 @@ export const verify = async (req, res) => {
 export const resendOtp = async (req, res) => {
   const id = req.user.id;
   const otp = getOtp();
-  const otpTime = getOtpExpiryTime(5);
+  const otpTimeMins = APP_CONFIG.OTP_EXPIRY_TIME_MINS;
+  const otpTime = getOtpExpiryTime(otpTimeMins);
 
   const user = await resendOtpService(id, otp, otpTime);
   if (!user) return res.status(401).send("Your not registered yet! Go to the sign up page!");
 
   // Send otp email
   try {
-    await emailService.sendOtp(email, "Your OTP Verification Code", user.name, otp, otpTime);
+    await emailService.sendOtp(user.email, "Your OTP Verification Code", user.name, otp, otpTimeMins);
   } catch (error) {
     logger.error(error.message);
     throw new AppError(error.nessage, 500);
@@ -95,7 +99,7 @@ export const login = async (req, res) => {
   if (!token) return res.status(401).send("Invalid credentials");
   
   res.cookie("token", token);
-  res.status(200).json({ message: "Login successful1"});
+  res.status(200).json({ message: "Login successful"});
 };
 
 
@@ -115,12 +119,13 @@ export const forgot = async (req, res) => {
   try {
     const { email } = req.body;
     const otp = getOtp();
-    const otpTime = getOtpExpiryTime();
+    const otpTimeMins = APP_CONFIG.OTP_EXPIRY_TIME_MINS;
+    const otpTime = getOtpExpiryTime(otpTimeMins);
     
     const user = await forgotPassword(email, otp, otpTime);
     
     if (!user) return res.status(400).send("Invalid credentials");
-    await emailService.sendPasswordRecoveryEmail(recipient=user.email, username=user.name, otp=otp, otpTime=otpTime);
+    await emailService.sendPasswordRecoveryEmail(user.email, 'Password Reset Request', user.name, otp, otpTimeMins);
     
     res.status(200).json({ message: "Password reset email has been sent to your inbox."});
 
@@ -137,14 +142,14 @@ export const reset = async (req, res) => {
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array()[0].msg });
 
   try {
-    const { email, password } = req.body;
-    await resetPassword(email, otp, password);
+    const { email, otp, newPassword } = req.body;
+    await resetPassword(email, otp, newPassword);
     
     // res.render("auth/login", { message: "Password reset successful. Please log in." });
     res.status(201).json({message: "Password reset was successful."});
 
   } catch (error) {
-    res.send(error.message);
+    res.status(400).send(error.message);
   }
 };
 

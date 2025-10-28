@@ -21,6 +21,7 @@ EMAIL_SERVICE_SMTP_HOST="smtp server eg smtp.gmail.com"
 EMAIL_SERVICE_USER="your email"
 EMAIL_SERVICE_APP_PASSWORD="your app password"
 EMAIL_SERVICE_PORT=465
+OTP_EXPIRY_TIME_MINS=5
 
 # External APIS
 JSECRET_API_KEY=

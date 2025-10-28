@@ -40,7 +40,7 @@ export const verifyAccountMiddleware = (req, res, next) => {
 
         if (!token) {
             logger.warn("Access denied: No Auth token provided. Please Sign Up.");
-            return res.status(401).json({ success: false, message: "Access denied. No token provided. Please Sign Up."});
+            return res.status(401).json({ success: false, message: "Access denied. No token provided. Please Sign Up / Log in."});
         };
 
         const decoded = jwt.verify(token, APP_CONFIG.JWT_OTP_SECRET);

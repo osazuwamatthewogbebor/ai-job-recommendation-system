@@ -10,11 +10,11 @@ import apiLimiter from "./middleware/rateLimiter.js";
 
 import { authRoutes, profileRoutes, uploadRoutes, jobRoutes } from './routes/index.js';
 import { authMiddleware } from './middleware/authMiddleware.js';
+import { errorHandler, notFound } from './middleware/errorHandler.js';
 
 
 const app = express();
 const port = APP_CONFIG.PORT;
-
 
 // Security setup
 app.use(helmet());
@@ -38,6 +38,15 @@ app.use('/api/auth', authRoutes);
 app.use('/api/profile', authMiddleware, profileRoutes);
 app.use('/api/uploads', authMiddleware, uploadRoutes);
 app.use('/api/recommend', authMiddleware, jobRoutes);
+
+
+// Error handlers
+
+// 404
+app.use(notFound);
+
+// Global error handler
+app.use(errorHandler);
 
 
 // Sync database 

@@ -23,6 +23,7 @@ export const jobController = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Profile not found' });
     }
     const profileData = userProfile.get({ plain: true });
+    
     const jobs = await recommendJobs(profileData);
 
     // Send recommended jobs to email

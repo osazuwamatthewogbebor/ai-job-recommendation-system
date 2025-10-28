@@ -4,6 +4,6 @@ import { jobController } from '../controllers/jobControllers.js';
 
 const router = express.Router();
 
-router.post('/', jobController);
+router.get('/', jobController);
 
 export default router;

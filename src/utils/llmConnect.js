@@ -12,7 +12,7 @@ async function main(userProfile) {
         temperature: 0.3,
         topP: 0.9,
         topK: 32,
-        maxOutputTokens: 512,
+        maxOutputTokens: 1000,
         responseMimeType: "application/json",
         systemInstruction: `
           You are an intelligent job query generator.
@@ -54,9 +54,8 @@ async function main(userProfile) {
                   `
       }
     });
-    // console.log(response.candidates[0].content);
     
-    const text = response.candidates[0].content.parts[0];
+    const text = response?.candidates[0]?.content?.parts[0];
     const llmOutput = JSON.parse(text.text);
     
     return llmOutput;
@@ -119,7 +118,7 @@ async function main(userProfile) {
           `
       }
     });
-    const text = response.candidates[0].content.parts[0];
+    const text = response?.candidates[0]?.content?.parts[0];
     const llmOutput = JSON.parse(text.text);
 
     return llmOutput;

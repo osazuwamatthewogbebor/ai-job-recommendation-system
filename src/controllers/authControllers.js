@@ -28,7 +28,7 @@ export const register = async (req, res) => {
   
   const token = await registerUser(name, email, password, otp, otpTime);
   
-  if (!token) return res.status(400).send("email already exists");
+  if (!token) return res.status(400).send("Invalid credentials");
 
   // Send otp email
   try {
@@ -75,7 +75,7 @@ export const resendOtp = async (req, res) => {
   const otpTime = getOtpExpiryTime(otpTimeMins);
 
   const user = await resendOtpService(id, otp, otpTime);
-  if (!user) return res.status(401).send("Your not registered yet! Go to the sign up page!");
+  if (!user) return res.status(401).send("You are not registered yet! Go to the sign up page!");
 
   // Send otp email
   try {

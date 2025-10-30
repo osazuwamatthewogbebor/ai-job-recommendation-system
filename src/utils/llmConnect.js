@@ -1,6 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import logger from "../config/logger.js";
 
+
 async function main(userProfile) {
   try {
     const ai = new GoogleGenAI({});

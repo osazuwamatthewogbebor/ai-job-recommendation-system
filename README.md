@@ -218,6 +218,30 @@ npm start
 
 ---
 
+## 🚀 API Overview
+
+This API powers the AI Job Finder application, providing endpoints for user authentication, job scraping, and AI-driven job recommendations.
+
+---
+
+
+### ⚙️ Quick Start
+
+1. Clone this repository
+2. Run `npm install`
+3. Configure `.env` file
+4. Start server: `npm run dev`
+
+
+### API Documentation
+
+You can view the complete API documentation below:
+
+- **Live Docs:** [AI Job API - Postman Documentation](https://www.postman.com/osazuwamatthewogbebor-6053984/team-space/collection/pcpidwu/smart-ai-jobber-api?action=share&creator=45030267)
+- **Collection File:** [postman/AI-Job-API.postman_collection.json](./postman/AI-Job-API.postman_collection.json)
+
+---
+
 ## Future Improvements
 - Integrate a real Redis database for caching.  
 - Add front-end dashboard for job analytics.  

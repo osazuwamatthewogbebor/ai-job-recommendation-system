@@ -1,0 +1,883 @@
+{
+	"info": {
+		"_postman_id": "a3c8539f-0c9b-4a66-9435-bf4f64f75ba6",
+		"name": "Smart AI Jobber API",
+		"description": "StartFragmentAn AI recommendation system that helps users get the jobs they are qualified for without going through the stress and hassle of sifting through tons of irrelevant jobs. Users can get AI recommendations straight to their emails. It uses MySQL with Sequelize ORM, JWT authentication, account verification, password recovery, job cache and rate limiter.EndFragment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45030267",
+		"_collection_link": "https://www.postman.com/osazuwamatthewogbebor-6053984/team-space/collection/pcpidwu/smart-ai-jobber-api?action=share&source=collection_link&creator=45030267"
+	},
+	"item": [
+		{
+			"name": "User / Admin Auth",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Smart\",\r\n  \"email\": \"ogbeuwa@gmail.com\",\r\n  \"password\": \"1234567\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/auth/register",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "**Endpoint:** `POST {{baseURL}}/api/auth/register`\n\nRegisters a new user by accepting their name, email, and password. On successful registration, an OTP (One-Time Password) is sent to the provided email address for verification.\n\n---\n\n### Request Body\n\n- **Content-Type:** `application/json`\n    \n- **Fields:**\n    - `name` (string, required): User's full name.\n        \n    - `email` (string, required): User's email address. Must be unique.\n        \n    - `password` (string, required): User's password (minimum requirements may apply).\n        \n\n**Sample Request Body:**\n\n``` json\n{\n  \"name\": \"Smart\",\n  \"email\": \"ogbeuwa@gmail.com\",\n  \"password\": \"1234567\"\n}\n\n ```\n\n---\n\n### Successful Response\n\n- **Status:** `201 Created`\n    \n- **Body:**\n    \n    ``` json\n    { \"message\": \"OTP sent to your email\" }\n    \n     ```\n    \n\n---\n\n### Error Responses\n\n- **400 Bad Request:**\n    - Missing or invalid fields in the request body.\n        \n    - Example: `{ \"error\": \"Email is required\" }`\n        \n- **409 Conflict:**\n    - Email already registered.\n        \n    - Example: `{ \"error\": \"Invalid credentials\" }`\n        \n\n---\n\n### Usage Notes\n\n- The `baseURL` variable should be set in your environment to target the correct API server.\n    \n- After registration, the user must complete the OTP verification flow to activate their account.\n    \n- Ensure the email provided is accessible to receive the OTP."
+					},
+					"response": []
+				},
+				{
+					"name": "verifyOtp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"ogbeuwa@gmail.com\",\r\n    \"otp\": \"986675\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/auth/verify",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"verify"
+							]
+						},
+						"description": "## Verify User Account\n\nThis POST request is used to verify a user's account by validating the provided email address and one-time password (OTP). It is typically called after a user registers or requests account verification, and has received an OTP via email.\n\n### Purpose\n- To confirm the user's identity and activate their account by verifying the OTP sent to their email address.\n\n### Request Body Parameters\n- `email` (string, required): The email address of the user to be verified. Example: `user@example.com`\n- `otp` (string, required): The one-time password sent to the user's email. Example: `123456`\n\n#### Example Request Body\n```json\n{\n  \"email\": \"user@example.com\",\n  \"otp\": \"123456\"\n}\n```\n\n### Expected Successful Response\n- **Status Code:** 200 OK\n- **Response Body:**\n  - On successful verification, the response will be:\n    ```\n    Account verification was successful\n    ```\n\nIf the OTP is invalid or expired, an error response will be returned.\n\n---\n\n**Endpoint:** `POST {{baseURL}}/api/auth/verify`"
+					},
+					"response": []
+				},
+				{
+					"name": "resend otp",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Matthew\",\r\n  \"email\": \"ogbeuwa@gmail.com\",\r\n  \"password\": \"1234567\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/auth/send-otp",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"send-otp"
+							]
+						},
+						"description": "Purpose: Resend a one-time password (OTP) to the user’s email for verification purposes (e.g., during signup or login verification).\n\nMethod: GET\n\nURL: {{baseURL}}/api/auth/send-otp\n\nRequired Params/Body:\n- Path params: none\n- Query params: none\n\nExample Success Response:\n- Status: 201 Created\n- Body:\n  {\n    \"message\": \"OTP sent to your email\"\n  }\n\nUsage Notes:\n- Ensure the baseURL variable is set in your active environment.\n- This request is part of the \"User / Admin Auth\" folder in the \"Smart AI Jobber API\" collection.\n- If you intend to resend the OTP to a specific user, ensure the email value is correct and corresponds to an existing user/session state on the server.\n"
+					},
+					"response": []
+				},
+				{
+					"name": "forgot password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"ogbeuwa@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/auth/forgot",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"forgot"
+							]
+						},
+						"description": "Initiates the password reset process by submitting the user’s email address. When a valid, registered email is provided, the server sends a password reset email to that address.\n\nHTTP\n- Method: POST\n- URL: {{baseURL}}/api/auth/forgot\n\nRequest body\n- Content-Type: application/json\n- Schema: { \"email\": \"string\" }\n- Example:\n  {\n    \"email\": \"user@example.com\"\n  }\n\nSuccessful response\n- Status: 200 OK\n- Typical body:\n  {\n    \"message\": \"Password reset email has been sent to your email address.\"\n  }\n\nNotes\n- Ensure {{baseURL}} is set in your environment."
+					},
+					"response": []
+				},
+				{
+					"name": "reset password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"email\": \"ogbeuwa@gmail.com\",\r\n   \"newPassword\": \"7654321\",\r\n   \"otp\": \"545701\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/auth/reset",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"reset"
+							]
+						},
+						"description": "## Password Reset (POST)\n\nThis endpoint allows a user to reset their account password using a one-time password (OTP) sent to their email address. It is typically used after the user initiates a 'forgot password' flow and receives an OTP.\n\n### Request URL\n`POST {{baseURL}}/api/auth/reset`\n\n### Request Body Parameters\nSend a JSON object in the request body with the following fields:\n\n- `email` (string, required): The email address associated with the user's account.\n- `newPassword` (string, required): The new password the user wishes to set.\n- `otp` (string, required): The one-time password sent to the user's email for verification.\n\n**Example Request Body:**\n```json\n{\n  \"email\": \"user@example.com\",\n  \"newPassword\": \"yourNewPassword123\",\n  \"otp\": \"123456\"\n}\n```\n\n### Successful Response\n- **Status Code:** `201 Created`\n- **Response Body:**\n  ```json\n  {\n    \"message\": \"Password reset was successful.\"\n  }\n  ```\n\n### Notes\n- Ensure the OTP is valid and has not expired.\n- If the OTP or email is invalid, an error response will be returned.\n\n"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"easydatabundle@gmail.com\",\r\n  \"password\": \"1234567\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/auth/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Summary: Authenticate a user and return an access token and message.\n\nPurpose: Use this endpoint to log users into the system using email and password credentials. Successful authentication returns a JSON response with a success message and (optionally) an access token to be used in subsequent authenticated requests.\n\nRequest URL and method: POST {{baseURL}}/api/auth/login\n\nPath/Variable: baseURL - Base URL of the API environment (use the Beta or Production environment).\n\nHeaders:\n- Content-Type: application/json\n- Accept: application/json\n\nRequest body schema:\n{\"type\":\"object\",\"properties\":{\"email\":{\"type\":\"string\"},\"password\":{\"type\":\"string\"}},\"required\":[\"email\",\"password\"]}\n\nExample request body:\n{\"email\":\"user@example.com\",\"password\":\"yourPassword123\"}\n\nExpected responses:\n- 200 OK\n  Example: {\"message\":\"Login successful\"}\n\nNotes:\n- Ensure Content-Type is application/json.\n"
+					},
+					"response": []
+				},
+				{
+					"name": "change password logged in users",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"oldPassword\": \"7654321\",\r\n   \"newPassword\": \"0987654321\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/auth/change-password",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"change-password"
+							]
+						},
+						"description": "Purpose\nChange the password for the currently authenticated user.\n\nHTTP\n- Method: POST\n- URL: {{baseURL}}/api/auth/change-password\n- Auth: Typically requires token. Ensure the user is logged in.\n\nRequest Body (JSON)\n{\n  \"oldPassword\": \"string\",   // The user’s current password (required)\n  \"newPassword\": \"string\"    // The desired new password (required)\n}\n\nValidation and Notes\n- Both fields are required.\n- newPassword should meet your server-side password policy (length/complexity/history/reuse rules).\n- On failure (e.g., wrong old password, policy violation), the API may return a 4xx response with an error message.\n\nSuccessful Response\n- Status: 201 Created\n- Body:\n{\n  \"message\": \"Password change was successful.\"\n}\n\nExample\nRequest body:\n{\n  \"oldPassword\": \"7654321\",\n  \"newPassword\": \"0987654321\"\n}\n\nExpected 201 response:\n{\n  \"message\": \"Password change was successful.\"\n}"
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"email\": \"ogbeuwa@gmail.com\",\r\n   \"newPassword\": \"7654321\",\r\n   \"otp\": \"545701\" \r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/auth/logout",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"logout"
+							]
+						},
+						"description": "**Logout Endpoint**\n\nThis endpoint logs out a user from the application and is typically used to terminate the user's session securely.\n\n**Request**\n- **Method:** GET\n- **URL:** `{{baseURL}}/api/auth/logout`\n\n\n**Successful Response**\n- **Status Code:** 200 OK\n- **Response Body:**\n  - `message` (string): Confirmation message indicating successful logout.\n\n**Example Response:**\n```json\n{\n  \"message\": \"Log out successful.\"\n}\n```\n\n**Notes:**\n- This endpoint may be used as part of a password reset or security flow."
+					},
+					"response": []
+				},
+				{
+					"name": "register admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Matthew\",\r\n  \"email\": \"easydatabundle@gmail.com\",\r\n  \"password\": \"1234567\",\r\n  \"role\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/auth/register",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Purpose\nRegister a new admin user in the system. This endpoint creates a user record and sends an OTP to the provided email address for verification. Use this endpoint during initial admin onboarding or when adding additional admin accounts.\n\nMethod and URL\nPOST {{baseURL}}/api/auth/register\n\nRequired headers\n- Content-Type: application/json (required)\n- Accept: application/json (optional)\n\nURL variables\n- baseURL: Base URL of the API (set via environment). Example: https://api.example.com\n\nRequest body (JSON)\nExample\n{\n  \"name\": \"Matthew\",\n  \"email\": \"easydatabundle@gmail.com\",\n  \"password\": \"strongP@ssw0rd\",\n  \"role\": \"admin\"\n}\n\nJSON schema\n{\n  \"type\": \"object\",\n  \"required\": [\"name\", \"email\", \"password\", \"role\"],\n  \"properties\": {\n    \"name\": { \"type\": \"string\", \"description\": \"Full name of the admin user\", \"example\": \"Matthew\" },\n    \"email\": { \"type\": \"string\", \"format\": \"email\", \"description\": \"Admin's email address where OTP will be sent\", \"example\": \"easydatabundle@gmail.com\" },\n    \"password\": { \"type\": \"string\", \"description\": \"Password for the account (min length 6)\", \"example\": \"strongP@ssw0rd\" },\n    \"role\": { \"type\": \"string\", \"enum\": [\"admin\", \"user\"], \"description\": \"Role assigned to the account (must be 'admin' for this endpoint)\", \"example\": \"admin\" }\n  }\n}\n\nSuccessful response\nStatus: 201\nBody\n{\n  \"message\": \"OTP sent to your email\"\n}\n\nError responses\n- 400 Validation error - missing or invalid fields\n \n  }"
+					},
+					"response": [
+						{
+							"name": "Successful registration",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"name\":\"Matthew\",\"email\":\"easydatabundle@gmail.com\",\"password\":\"1234567\",\"role\":\"admin\"}"
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/auth/register",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": ""
+								},
+								{
+									"key": "Accept",
+									"value": "application/json",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"body": "{\"message\":\"OTP sent to your email\"}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "User Profile",
+			"item": [
+				{
+					"name": "create profile",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "skills",
+									"value": "[\"python\", \"React\", \"Expressjs\", \"sql\", \"web3\"]",
+									"type": "text"
+								},
+								{
+									"key": "isRemotePreferred",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "job_titles",
+									"value": "Junior Web Developer",
+									"type": "text"
+								},
+								{
+									"key": "preferred_location",
+									"value": "Abuja",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Nigeria",
+									"type": "text"
+								},
+								{
+									"key": "resume",
+									"type": "file",
+									"src": "/C:/Users/USER/Downloads/roles (2).pdf"
+								},
+								{
+									"key": "profileImage",
+									"type": "file",
+									"src": "/C:/Users/USER/Downloads/WhatsApp Image 2025-10-24 at 10.04.27 PM.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/profile/create",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"profile",
+								"create"
+							]
+						},
+						"description": "**Purpose:**\nCreates a new user profile in the system.\n\n**HTTP Method & URL:**\n- `POST {{baseURL}}/api/profile/create`\n- `{{baseURL}}` is a variable for the API base URL.\n\n**Required Headers:**\n- `Content-Type: multipart/form-data`\n- `Authorization: \"token\" saved in cookies\n\n**Body Parameters (form-data):**\n- `skills` (array of strings): List of skills. Example: `[\"python\", \"React\", \"Expressjs\", \"sql\", \"web3\"]`\n- `isRemotePreferred` (boolean): Whether remote work is preferred. Example: `true`\n- `job_titles` (string): Desired job title(s). Example: `Junior Web Developer`\n- `preferred_location` (string): Preferred job location. Example: `Abuja`\n- `country` (string): Country of residence. Example: `Nigeria`\n- `resume` (doc file): Add resume file. Example: `resume.pdf`\n- `profileImage` (image file): Add profile image. Example: `image.png`\n\n**Expected Successful Response:**\n- **Status:** `201 Created`\n- **Body Example:**\n```json\n{\n  \"title\": \"Profile Created\",\n  \"profile\": {\n    \"id\": \"<uuid>\",\n    \"skills\": \"[\\\"python\\\", \\\"React\\\", ...]\",\n    \"isRemotePreferred\": true,\n    \"job_titles\": \"Junior Web Developer\",\n    \"preferred_location\": \"Abuja\",\n    \"country\": \"Nigeria\",\n    \"resumeUrl\": \"http://localhost:3000/uploads/resume-...\",\n    \"profileImageUrl\": \"http://localhost:3000/uploads/profileIma...\",\n    \"userId\": 4,\n    \"updatedAt\": \"2025-10-31T12:23:56.239Z\",\n    \"createdAt\": \"2025-10-31T12:23:56.239Z\"\n  },\n  \"message\": \"Profile created successfully!\"\n}\n```\n\n**Common Errors:**\n- `400 Bad Request`: Missing or invalid fields in the request body.\n- `401 Unauthorized`: Missing or invalid token.\n- `500 Internal Server Error`: Server encountered an unexpected condition.\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "skills",
+									"value": "[\"python\", \"React\", \"Expressjs\", \"sql\", \"web3\"]",
+									"type": "text"
+								},
+								{
+									"key": "isRemotePreferred",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "job_titles",
+									"value": "Junior Web Developer",
+									"type": "text"
+								},
+								{
+									"key": "preferred_location",
+									"value": "Abuja",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Nigeria",
+									"type": "text"
+								},
+								{
+									"key": "resume",
+									"type": "file",
+									"src": "/C:/Users/USER/Downloads/roles (2).pdf"
+								},
+								{
+									"key": "profileImage",
+									"type": "file",
+									"src": "/C:/Users/USER/Downloads/WhatsApp Image 2025-10-24 at 10.04.27 PM.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/profile/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"profile",
+								""
+							]
+						},
+						"description": "### Get User Profile\n\nThis request retrieves the authenticated user's profile information from the API.\n\n**Endpoint:** `GET {{baseURL}}/api/profile/`\n\n#### Purpose\nUse this endpoint to fetch the current user's profile details, including personal information, skills, job preferences, and associated resources such as resume and profile image URLs.\n\n#### Typical Response Structure\nA successful response (`200 OK`) returns a JSON object with the following structure:\n\n```json\n{\n  \"title\": \"Your Profile\",\n  \"userProfile\": {\n    \"id\": 4,\n    \"name\": \"Smart\",\n    \"email\": \"ogbeuwa@gmail.com\",\n    \"role\": \"user\",\n    \"verified\": true,\n    \"createdAt\": \"2025-10-31T12:12:59.000Z\",\n    \"updatedAt\": \"2025-10-31T12:14:25.000Z\",\n    \"Profile\": {\n      \"id\": \"c406da8d-53fc-457e-9251-1b0fb3d7e6b8\",\n      \"skills\": \"[\\\"python\\\", \\\"React\\\", ...]\",\n      \"isRemotePreferred\": true,\n      \"job_titles\": \"Junior Web Developer\",\n      \"preferred_location\": \"Abuja\",\n      \"country\": \"Nigeria\",\n      \"resumeUrl\": \"http://localhost:3000/uploads/resume-...\",\n      \"profileImageUrl\": \"http://localhost:3000/uploads/profileIma...\",\n      \"createdAt\": \"2025-10-31T12:23:56.000Z\",\n      \"updatedAt\": \"2025-10-31T12:29:14.000Z\",\n      \"userId\": 4\n    }\n  }\n}\n```\n\n##### Key Fields\n- **id, name, email, role, verified**: Basic user info.\n- **Profile**: Nested object with skills, job preferences, resume/profile image URLs, and timestamps.\n\n#### Usage Notes\n- Ensure authentication is set up as required by the API.\n- The response provides all profile details for the currently authenticated user.\n"
+					},
+					"response": []
+				},
+				{
+					"name": "update profile",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "skills",
+									"value": "[\"python\", \"React\", \"Expressjs\", \"sql\", \"web3\"]",
+									"type": "text"
+								},
+								{
+									"key": "isRemotePreferred",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "job_titles",
+									"value": "Junior Web Developer",
+									"type": "text"
+								},
+								{
+									"key": "preferred_location",
+									"value": "Ottawa",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Canada",
+									"type": "text"
+								},
+								{
+									"key": "resume",
+									"type": "file",
+									"src": "/C:/Users/USER/Downloads/roles (1).pdf"
+								},
+								{
+									"key": "profileImage",
+									"type": "file",
+									"src": "/C:/Users/USER/Downloads/WhatsApp Image 2025-10-24 at 10.04.27 PM.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/profile/update",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"profile",
+								"update"
+							]
+						},
+						"description": "**Purpose:**\nThis POST request updates the profile information of an existing user.\n\n**Endpoint:**\n`POST {{baseURL}}/api/profile/update`\n\n**Body Parameters (multipart/form-data):**\n- `skills` (array of strings): List of the user's skills. Example: `[\"python\", \"React\", \"Expressjs\", \"sql\", \"web3\"]`\n- `isRemotePreferred` (boolean): Indicates if the user prefers remote work. Example: `true`\n- `job_titles` (string): The user's job title(s). Example: `Junior Web Developer`\n- `preferred_location` (string): The user's preferred work location. Example: `Ottawa`\n- `country` (string): The user's country. Example: `Canada`\n- `resume` (doc file): Add resume file. Example: `resume.pdf`\n- `profileImage` (image file): Add profile image. Example: `image/png`\n\n**Successful Response (200 OK):**\nReturns a JSON object containing:\n- `title`: Confirmation title (e.g., \"Profile Updated\").\n- `message`: Success message (e.g., \"Profile updated successfully!\").\n- `profile`: The updated profile object, including fields such as `id`, `skills`, `isRemotePreferred`, `job_titles`, `preferred_location`, `country`, `resumeUrl`, `profileImageUrl`, `createdAt`, `updatedAt`, and `userId`.\n\n**Example Response:**\n```json\n{\n  \"title\": \"Profile Updated\",\n  \"message\": \"Profile updated successfully!\",\n  \"profile\": {\n    \"id\": \"bc87efbc-9796-46a8-b657-aded08e22d4a\",\n    \"skills\": \"[\\\"python\\\", \\\"React\\\", \\\"Expressjs\\\", \\\"sql\\\", ...]\",\n    \"isRemotePreferred\": true,\n    \"job_titles\": \"Junior Web Developer\",\n    \"preferred_location\": \"Ottawa\",\n    \"country\": \"Canada\",\n    \"resumeUrl\": \"http://localhost:3000/uploads/resume-...\",\n    \"profileImageUrl\": \"http://localhost:3000/uploads/profileIma...\",\n    \"createdAt\": \"2025-10-31T11:54:36.000Z\",\n    \"updatedAt\": \"2025-10-31T12:09:01.693Z\",\n    \"userId\": 1\n  }\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "delete profile",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "skills",
+									"value": "[\"python\", \"React\", \"Expressjs\", \"sql\", \"web3\"]",
+									"type": "text"
+								},
+								{
+									"key": "isRemotePreferred",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "job_titles",
+									"value": "Junior Web Developer",
+									"type": "text"
+								},
+								{
+									"key": "preferred_location",
+									"value": "Ottawa",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Canada",
+									"type": "text"
+								},
+								{
+									"key": "resume",
+									"type": "file",
+									"src": "/C:/Users/USER/Downloads/roles (1).pdf"
+								},
+								{
+									"key": "profileImage",
+									"type": "file",
+									"src": "/C:/Users/USER/Downloads/WhatsApp Image 2025-10-24 at 10.04.27 PM.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/profile/delete",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"profile",
+								"delete"
+							]
+						},
+						"description": "Purpose: Permanently delete the authenticated user's profile and associated profile data.\n\nMethod & URL: DELETE {{baseURL}}/api/profile/delete\n\nAuthentication: Requires a valid \"token\" in the cookies.\n\nExpected Response:\n- 200 OK {\"sucess\": true, \"message\": \"Account deleted successfully\"}\n\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Single Uploads (Resume / Profile Image)",
+			"item": [
+				{
+					"name": "upload resume",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "resume",
+									"type": "file",
+									"src": "/C:/Users/USER/Downloads/ticket-SMFest Osazuwa.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/uploads/resume",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"uploads",
+								"resume"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						},
+						"description": "**Endpoint:** `POST {{baseURL}}/api/uploads/resume`\n\n**Purpose:**\nThis endpoint allows users to upload a resume file to the server.\n\n**Request Body:**\n- Content-Type: `multipart/form-data`\n- Form Data:\n  - `resume` (file, required): The resume file to be uploaded. Supported formats typically include PDF, DOC, or DOCX.\n\n**Example Request:**\n```\nPOST {{baseURL}}/api/uploads/resume\nContent-Type: multipart/form-data\n\nForm Data:\n  resume: <file>\n```\n\n**Successful Response:**\n- Status: `201 Created`\n- Content-Type: `application/json`\n- Body:\n  ```json\n  {\n    \"message\": \"Resume uploaded successfully\",\n    \"resumeUrl\": \"http://localhost:3000/uploads/resume-<unique-id>\"\n  }\n  ```\n\n**Notes:**\n- The `resumeUrl` in the response provides a direct link to the uploaded resume file.\n- Ensure that the `resume` field is included in the form data and contains a valid file.\n- Authentication is required\n"
+					},
+					"response": []
+				},
+				{
+					"name": "upload pofile image",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "profileImage",
+									"type": "file",
+									"src": "/C:/Users/USER/Downloads/score-card.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/uploads/profile-image",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"uploads",
+								"profile-image"
+							]
+						},
+						"description": "**Purpose:**\nUploads a user's profile image to the server.\n\n**URL:**\n`POST {{baseURL}}/api/uploads/profile-image`\n\n**Method:**\nPOST\n\n**Required Form-Data Fields:**\n- `profileImage` (file, required): The image file to upload as the user's profile picture.\n\n**Expected Responses:**\n- **201 Created**\n  ```json\n  {\n    \"message\": \"ProfileImage uploaded successfully\",\n    \"profileImageUrl\": \"http://localhost:3000/uploads/profileImage.jpg\"\n  }\n  ```\n\n**Common Errors:**\n- **400 Bad Request:** Missing or invalid file\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Job Recommendations",
+			"item": [
+				{
+					"name": "recommend jobs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/recommend",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"recommend"
+							]
+						},
+						"description": "**Purpose:**  \nThis endpoint retrieves a list of recommended jobs tailored to the user's profile or preferences powered with AI.\n\n**Endpoint:**  \n`GET {{baseURL}}/api/recommend`\n\n**Query Parameters:**\n\n- No required or optional query parameters are explicitly documented. The endpoint uses the `{{baseURL}}` variable, which should be set in your environment.\n    \n\n**Authentication:**\n\n- User must be logged in with JWT token in cookies \"token\"\n    \n\n**Expected Response:**\n\n- On success (`200 OK`), returns a JSON object with:\n    \n    - `success` (boolean): Indicates if the request was successful.\n        \n    - `message` (string): Status or informational message.\n        \n    - `jobs` (array): List of recommended jobs. Each job object contains:\n        \n        - `job_id` (string): Unique identifier for the job.\n            \n        - `title` (string): Job title.\n            \n        - `company` (string): Company name.\n            \n        - `location` (string): Job location (may be empty).\n            \n        - `link` (string): URL to the job posting.\n            \n        - `match_score` (integer): Match score (0-100) indicating relevance.\n            \n        - `reason` (string): Explanation for the recommendation.\n            \n\n**Example Response:**\n\n``` json\n{\n  \"success\": true,\n  \"message\": \"Job recommendations fetched successfully.\",\n  \"jobs\": [\n    {\n      \"job_id\": \"Z6d7dVef7rD01lS5AAAAAA==\",\n      \"title\": \"Junior Backend Developer (Python)\",\n      \"company\": \"MasterBorn\",\n      \"location\": \"\",\n      \"link\": \"https://up2staff.com/backend-developer-python\",\n      \"match_score\": 90,\n      \"reason\": \"Excellent match for 'Junior Web Developer' skills.\"\n    }\n    // ...more jobs\n  ]\n}\n\n ```\n\n**Example Use Case:**  \nA user wants to see AI job recommendations based on their uploaded profile. This endpoint returns a curated list of jobs with match scores and reasons for each recommendation."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin Actions",
+			"item": [
+				{
+					"name": "get all users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "skills",
+									"value": "[\"python\", \"React\", \"Expressjs\", \"sql\", \"web3\"]",
+									"type": "text"
+								},
+								{
+									"key": "isRemotePreferred",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "job_titles",
+									"value": "Junior Web Developer",
+									"type": "text"
+								},
+								{
+									"key": "preferred_location",
+									"value": "Abuja",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Nigeria",
+									"type": "text"
+								},
+								{
+									"key": "resume",
+									"type": "file",
+									"src": "/C:/Users/USER/Downloads/roles (2).pdf"
+								},
+								{
+									"key": "profileImage",
+									"type": "file",
+									"src": "/C:/Users/USER/Downloads/WhatsApp Image 2025-10-24 at 10.04.27 PM.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/admin/users",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"admin",
+								"users"
+							]
+						},
+						"description": "Purpose: Retrieve all user accounts for administrative review, including optional profile information.\n\nEndpoint: {{baseURL}}/admin/users\nMethod: GET\n\nPath params: None.\nQuery params: None (endpoint returns all users). If the API later supports filtering (e.g., ?role=admin&verified=true), document them here.\n\n\nAuthentication: Logged in admin account \n\nSuccessful response (200) summary:\n{\n  success: boolean,\n  message: string,\n  users: [\n    {\n      id: number,\n      name: string,\n      email: string,\n      role: \"user\" | \"admin\" | string,\n      verified: boolean,\n      createdAt: ISODateString,\n      updatedAt: ISODateString,\n      Profile: null | {\n        id: string,\n        skills: string | string[],\n        isRemotePreferred: boolean,\n        job_titles: string,\n        preferred_location: string,\n        country: string,\n        resumeUrl?: string,\n        profileImageUrl?: string,\n        createdAt: ISODateString,\n        updatedAt: ISODateString,\n        userId: number\n      }\n    }\n  ]\n}\n\nCommon status codes:\n- 200 OK: Users retrieved successfully.\n- 401 Unauthorized: Missing/invalid token.\n- 403 Forbidden: Authenticated but not authorized (requires admin).\n- 500 Internal Server Error: Unexpected server error.\n\nUsage notes:\n- No request body is needed for GET; remove or ignore body to avoid confusion.\n- Use environment variable baseURL to target different stages (local, staging, prod)."
+					},
+					"response": []
+				},
+				{
+					"name": "get single user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "skills",
+									"value": "[\"python\", \"React\", \"Expressjs\", \"sql\", \"web3\"]",
+									"type": "text"
+								},
+								{
+									"key": "isRemotePreferred",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "job_titles",
+									"value": "Junior Web Developer",
+									"type": "text"
+								},
+								{
+									"key": "preferred_location",
+									"value": "Abuja",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Nigeria",
+									"type": "text"
+								},
+								{
+									"key": "resume",
+									"type": "file",
+									"src": "/C:/Users/USER/Downloads/roles (2).pdf"
+								},
+								{
+									"key": "profileImage",
+									"type": "file",
+									"src": "/C:/Users/USER/Downloads/WhatsApp Image 2025-10-24 at 10.04.27 PM.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/admin/users/4",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"admin",
+								"users",
+								"4"
+							]
+						},
+						"description": "**Purpose:**\nFetch details for a single user by their unique ID (admin access required).\n\n**Endpoint:**\n`GET {{baseURL}}/admin/users/:id`\n\n- **Path Parameter:** `id` (integer) — The unique identifier of the user to retrieve. In this request, the value is `4`.\n- **Environment Variable:** `baseURL` — The base URL for the API, set in your active environment.\n\n**Authentication:**\nThis endpoint is restricted to admin users. Ensure you are authenticated as an admin\n\n**Expected 200 Response:**\nReturns a JSON object with user details and a nested `Profile` object.\n\n**Response Shape:**\n```\n{\n  \"success\": true,\n  \"message\": \"User detail retrieved\",\n  \"user\": {\n    \"id\": 4,\n    \"name\": \"Smart\",\n    \"email\": \"ogbeuwa@gmail.com\",\n    \"role\": \"user\",\n    \"verified\": true,\n    \"createdAt\": \"2025-10-31T12:12:59.000Z\",\n    \"updatedAt\": \"2025-10-31T12:14:25.000Z\",\n    \"Profile\": {\n      \"id\": \"...\",\n      \"skills\": \"[\\\"python\\\", \\\"React\\\", ...]\",\n      \"isRemotePreferred\": true,\n      \"job_titles\": \"Junior Web Developer\",\n      \"preferred_location\": \"Abuja\",\n      \"country\": \"Nigeria\",\n      \"resumeUrl\": \"...\",\n      \"profileImageUrl\": \"...\",\n      \"createdAt\": \"...\",\n      \"updatedAt\": \"...\",\n      \"userId\": 4\n    }\n  }\n}\n```\n\n**Example Response Fields:**\n- `user.id` — User's unique ID\n- `user.name` — Full name\n- `user.email` — Email address\n- `user.role` — User role (e.g., 'user', 'admin')\n- `user.verified` — Email verification status\n- `user.Profile.skills` — Array of skills (as JSON string)\n- `user.Profile.isRemotePreferred` — Remote work preference\n- `user.Profile.job_titles` — Job title(s)\n- `user.Profile.preferred_location` — Preferred location\n- `user.Profile.country` — Country\n- `user.Profile.resumeUrl` — Link to resume\n- `user.Profile.profileImageUrl` — Link to profile image\n\n**Notes:**\n- Ensure the `baseURL` environment variable is set correctly.\n- Only accessible to admin users."
+					},
+					"response": []
+				},
+				{
+					"name": "get users statistics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/admin/stats",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"admin",
+								"stats"
+							]
+						},
+						"description": "**Purpose:**\nRetrieves aggregated statistics about users and profiles in the Smart AI Jobber system. Useful for admin dashboards and analytics.\n\n**Request URL:**\n`GET {{baseURL}}/admin/stats`\n\n**Parameters:**\n- This endpoint does not require any query or path parameters.\n- Requires appropriate admin authentication.\n\n**Example Response:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Smart AI Jobber stats fetched successfully\",\n  \"stats\": {\n    \"success\": true,\n    \"message\": \"Users statistics retrieved successfully\",\n    \"stats\": {\n      \"users\": {\n        \"total\": 2,\n        \"verified\": 1,\n        \"unverified\": 1\n      },\n      \"profiles\": {\n        \"total\": 1,\n        \"withImage\": 1,\n        \"withoutImage\": 0,\n        \"withResume\": 1,\n        \"withoutResume\": 0\n      }\n    }\n  }\n}\n```\n\n**Expected Status Codes:**\n- `200 OK`: Statistics successfully retrieved.\n- `401 Unauthorized`: Authentication required or failed.\n- `403 Forbidden`: Insufficient permissions.\n- `500 Internal Server Error`: Unexpected server error."
+					},
+					"response": []
+				},
+				{
+					"name": "delete user account",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "skills",
+									"value": "[\"python\", \"React\", \"Expressjs\", \"sql\", \"web3\"]",
+									"type": "text"
+								},
+								{
+									"key": "isRemotePreferred",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "job_titles",
+									"value": "Junior Web Developer",
+									"type": "text"
+								},
+								{
+									"key": "preferred_location",
+									"value": "Abuja",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Nigeria",
+									"type": "text"
+								},
+								{
+									"key": "resume",
+									"type": "file",
+									"src": "/C:/Users/USER/Downloads/roles (2).pdf"
+								},
+								{
+									"key": "profileImage",
+									"type": "file",
+									"src": "/C:/Users/USER/Downloads/WhatsApp Image 2025-10-24 at 10.04.27 PM.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/admin/users/5",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"admin",
+								"users",
+								"5"
+							]
+						},
+						"description": "**Purpose:**\nDeletes a user account by user ID.\n\n**HTTP Method & URL:**\n`DELETE {{baseURL}}/admin/users/:userId`\n\n**Path Parameter:**\n- `userId` (string or integer): The unique identifier of the user to delete. Example: `5`\n\n**Expected Success Response:**\n- Status: `200 OK`\n- Body:\n```json\n{\n  \"success\": true,\n  \"message\": \"User 5 deleted successfully\"\n}\n```\n\n**Common Error Responses:**\n- `401 Unauthorized`: Authentication required or invalid credentials.\n- `404 Not Found`: User does not exist.\n- `500 Internal Server Error`: Unexpected server error.\n\n**Usage Notes:**\n- The `baseURL` is an environment variable and should be set in your active Postman environment.\n- This endpoint is part of the 'Smart AI Jobber API' collection.\n"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "default"
+		}
+	]
+}

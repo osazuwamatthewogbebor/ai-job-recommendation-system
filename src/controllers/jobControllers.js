@@ -1,6 +1,7 @@
 import logger from "../config/logger.js";
-import Profile from "../models/Profile.js";
-import User from "../models/User.js";
+// import Profile from "../models/Profile.js";
+// import User from "../models/User.js";
+import { User, Profile } from "../models/index.js";
 import emailService from "../services/emailService.js";
 import { recommendJobs } from "../services/jobRecommendationService.js";
 

@@ -1,3 +1,4 @@
+import logger from "../config/logger.js";
 import { uploadProfileImage, uploadResume } from "../services/uploadServices.js";
 
 

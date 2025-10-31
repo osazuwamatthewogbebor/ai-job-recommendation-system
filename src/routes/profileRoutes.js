@@ -10,10 +10,25 @@ import upload from "../middleware/multerSetup.js";
 const router = express.Router();
 
 // Routes
+router.post("/create", 
+  upload.fields([
+    { name: "resume", maxCount: 1 },
+    { name: "profileImage", maxCount: 1 },
+  ]), 
+  createProfile
+);
+
 router.get("/", getProfile);
-router.post("/create", upload.single("resume"), createProfile);
-router.post("/update", upload.single("resume"), updateProfile);
-router.post("/delete", deleteAccount);
+
+router.post("/update", 
+  upload.fields([
+    { name: "resume", maxCount: 1 },
+    { name: "profileImage", maxCount: 1 },
+  ]), 
+  updateProfile
+);
+
+router.delete("/delete", deleteAccount);
 
 
 export default router;

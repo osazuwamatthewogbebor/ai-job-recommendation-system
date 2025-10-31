@@ -44,6 +44,5 @@ const Profile = sequelize.define('Profile', {
   timestamps: true,
 });
 
-Profile.belongsTo(User, { foreignKey: "userId", onDelete: "CASCADE" });
 
 export default Profile;

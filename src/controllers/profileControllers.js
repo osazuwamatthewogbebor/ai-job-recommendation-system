@@ -11,9 +11,25 @@ export const createProfile = async (req, res) => {
   try {
     const userId = req.user.id;
     const profileData = req.body;
-    const resumeUrl = `${req.protocol}://${req.get('host')}/${req.file?.path?.replace(/\\/g, '/')}`;
+
+    delete profileData.id;
+    delete profileData.userId
+
+    let resumeUrl;
+    let profileImageUrl;
+
+    if (req.files?.resume) {
+      const resumeFile = req.files.resume[0];
+      resumeUrl = `${req.protocol}://${req.get('host')}/${resumeFile.path?.replace(/\\/g, '/')}`;
+    };
+
+    if (req.files?.profileImage) {
+      const profileImageFile = req.files.profileImage[0];
+      profileImageUrl = `${req.protocol}://${req.get('host')}/${profileImageFile.path?.replace(/\\/g, '/')}`;
+    };
+
     
-    const profile = await createProfileService(userId, { ...profileData, resumeUrl });
+    const profile = await createProfileService(userId, { ...profileData, resumeUrl, profileImageUrl });
     res.status(201).json({
       title: "Profile Created",
       profile,
@@ -27,8 +43,8 @@ export const createProfile = async (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     const userId = req.user.id;
-    const profile = await getProfileService(userId);
-    res.status(200).json({ title: "Your Profile", profile });
+    const userProfile = await getProfileService(userId);
+    res.status(200).json({ title: "Your Profile", userProfile });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -38,12 +54,25 @@ export const updateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
     const updatedData = req.body;
-    const resumeUrl = `${req.protocol}://${req.get('host')}/${req.file?.path?.replace(/\\/g, '/')}`;
     
     delete updatedData.id;
     delete updatedData.userId
 
-    const profile = await updateProfileService(userId, { ...updatedData, resumeUrl });
+    let resumeUrl;
+    let profileImageUrl;
+
+    if (req.files?.resume) {
+      const resumeFile = req.files.resume[0];
+      resumeUrl = `${req.protocol}://${req.get('host')}/${resumeFile.path?.replace(/\\/g, '/')}`;
+    };
+
+    if (req.files?.profileImage) {
+      const profileImageFile = req.files.profileImage[0];
+      profileImageUrl = `${req.protocol}://${req.get('host')}/${profileImageFile.path?.replace(/\\/g, '/')}`;
+    };
+
+
+    const profile = await updateProfileService(userId, { ...updatedData, resumeUrl, profileImageUrl });
 
     // Clear user cache to avoid stale data
     const pattern = `jobs:*:user:${profile.userId}*`;

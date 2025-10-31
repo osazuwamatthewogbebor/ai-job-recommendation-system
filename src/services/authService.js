@@ -1,18 +1,18 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
+import { User } from "../models/index.js";
 import emailService from "./emailService.js";
 import APP_CONFIG from "../config/APP_CONFIG.js";
 
 
 // Register new user
-export const registerUser = async (name, email, password, otp, otpTime) => {
+export const registerUser = async (name, email, password, role, otp, otpTime) => {
   const exisingUser = await User.findOne({ where: { email } });
   if (exisingUser) return null;
   const hashed = await bcrypt.hash(password, 10);
-  const user = await User.create({ name, email, password: hashed }, otp, otpTime);
+  const user = await User.create({ name, email, password: hashed, role, otp, otpTime });
 
-  const token = jwt.sign({ id: user.id, email: user.email }, APP_CONFIG.JWT_OTP_SECRET, { expiresIn: APP_CONFIG.VERIFICATION_TOKEN_EXPIRY_TIME });
+  const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, APP_CONFIG.JWT_OTP_SECRET, { expiresIn: APP_CONFIG.VERIFICATION_TOKEN_EXPIRY_TIME });
 
   return token;
 };
@@ -52,7 +52,7 @@ export const loginUser = async (email, password) => {
   if (!user) return null;
   const match = await bcrypt.compare(password, user.password);
   if (!match) return null;
-  const token = jwt.sign({ id: user.id, email: user.email }, APP_CONFIG.JWT_SECRET, { expiresIn: APP_CONFIG.ACCESS_TOKEN_EXPIRY_TIME });
+  const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, APP_CONFIG.JWT_SECRET, { expiresIn: APP_CONFIG.ACCESS_TOKEN_EXPIRY_TIME });
   return token;
 };
 

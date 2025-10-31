@@ -1,14 +1,13 @@
-import { deleteUser, getAllUsers, getStats } from "../controllers/adminControllers.js";
-// import { authMiddleware } from "../middleware/authMiddleware.js";
-// import { authorizeAdmin } from "../middleware/authorizeAdmin.js";
+import { deleteUser, getAllUsers, getSingleUser, getStats } from "../controllers/adminControllers.js";
 import { Router } from "express";
 
 
 const router = Router();
 
 router.get('/users', getAllUsers);
-router.delete('/user:id', deleteUser);
+router.get('/users/:id', getSingleUser);
 router.get('/stats', getStats);
+router.delete('/users/:id', deleteUser);
 
 
 export default router;

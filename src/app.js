@@ -63,7 +63,7 @@ app.use(errorHandler);
 })();
 
 // Sync database 
-sequelize.sync({ force: true })
+sequelize.sync()
     .then(() => {
         logger.info('Database synchronized successfully');
         app.listen(port, () => { 

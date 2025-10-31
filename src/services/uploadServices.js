@@ -1,5 +1,5 @@
 import logger from "../config/logger.js";
-import Profile from "../models/Profile.js";
+import { Profile } from "../models/index.js";
 import path from "path";
 import fs from "fs";
 

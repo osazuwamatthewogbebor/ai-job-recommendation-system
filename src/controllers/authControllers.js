@@ -21,12 +21,12 @@ export const register = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array()[0].msg });
 
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
   const otp = getOtp();
   const otpTimeMins = APP_CONFIG.OTP_EXPIRY_TIME_MINS;
   const otpTime = getOtpExpiryTime(otpTimeMins);
   
-  const token = await registerUser(name, email, password, otp, otpTime);
+  const token = await registerUser(name, email, password, role, otp, otpTime);
   
   if (!token) return res.status(400).send("Invalid credentials");
 

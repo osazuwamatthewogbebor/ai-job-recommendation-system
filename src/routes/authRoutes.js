@@ -88,7 +88,9 @@ router.post("/reset",
   ],
   reset);
 
+// logout
 router.get("/logout", logout);
+
 
 //  Change password route
 router.post("/change-password", 

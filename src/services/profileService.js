@@ -1,5 +1,6 @@
-import Profile from "../models/Profile.js";
-import User from "../models/User.js";
+// import Profile from "../models/Profile.js";
+// import User from "../models/User.js";
+import { User, Profile } from "../models/index.js";
 import AppError from "../utils/AppError.js";
 
 
@@ -12,9 +13,18 @@ export const createProfileService = async (userId, data) => {
 };
 
 export const getProfileService = async (userId) => {
-  const profile = await Profile.findOne({ where: { userId } });
-  if (!profile) throw new AppError("Profile not found.");
-  return profile;
+  const userProfile = await User.findOne({ 
+    where: { id: userId },
+    attributes: { exclude: ["password", "otp", "otpTime"] },
+    include: [
+      {
+        model: Profile,
+        required: false,
+      }
+    ]
+  });
+  if (!userProfile) throw new AppError("Profile not found.");
+  return userProfile;
 };
 
 export const updateProfileService = async (userId, data) => {

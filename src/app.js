@@ -8,10 +8,11 @@ import cors from 'cors';
 import helmet from 'helmet';
 import apiLimiter from "./middleware/rateLimiter.js";
 
-import { authRoutes, profileRoutes, uploadRoutes, jobRoutes } from './routes/index.js';
+import { authRoutes, profileRoutes, uploadRoutes, jobRoutes, adminRoutes } from './routes/index.js';
 import { authMiddleware } from './middleware/authMiddleware.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { initRedis } from './config/cache.js';
+import { authorizeAdmin } from './middleware/authorizeAdmin.js';
 
 
 const app = express();
@@ -40,6 +41,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/profile', authMiddleware, profileRoutes);
 app.use('/api/uploads', authMiddleware, uploadRoutes);
 app.use('/api/recommend', authMiddleware, jobRoutes);
+app.use('/admin', authMiddleware, authorizeAdmin, adminRoutes);
 
 
 // Error handlers

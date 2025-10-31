@@ -237,7 +237,7 @@ This API powers the AI Job Finder application, providing endpoints for user auth
 
 You can view the complete API documentation below:
 
-- **Live Docs:** [AI Job API - Postman Documentation](https://www.postman.com/osazuwamatthewogbebor-6053984/team-space/collection/pcpidwu/smart-ai-jobber-api?action=share&creator=45030267)
+- **Live Docs:** [Smart AI Jobber API - Postman Documentation](https://documenter.getpostman.com/view/45030267/2sB3WpQ11D)
 - **Collection File:** [postman/AI-Job-API.postman_collection.json](./postman/AI-Job-API.postman_collection.json)
 
 ---

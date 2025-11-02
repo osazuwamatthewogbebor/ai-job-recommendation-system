@@ -263,13 +263,13 @@ You can use
 ```javascript
 logger.info(`Server started on ${port}`)
 ```
-*The log will be saved in the app.logs file and also outputted in the console.*
+**The log will be saved in the app.logs file and also outputted in the console.**
 ---
 
 ## Future Improvements 
 - Add front-end dashboard for job analytics.  
 - Support LinkedIn profile imports for auto-profile creation.  
-- Use fine-tuned AI agent for smarter job ranking. 
+- Use fine-tuned AI agent for smarter job ranking orchestration.
    
 ---
 
@@ -283,7 +283,8 @@ logger.info(`Server started on ${port}`)
 - [Timothy Olaleye](https://github.com/Folarex10) (User Management & Access Control Expert)
 
 
-- Each member actively contributed code, commits, and documentation.
+
+*Each member actively contributed code, commits, and documentation.*
 
 ---
 ## Special Acknowledgement
